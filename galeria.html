@@ -87,7 +87,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, query, where, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCTjyrFGjq5zr5hqnMT3qZX4sNuWZT3AJQ",
@@ -103,7 +103,8 @@
 
         const liveGrid = document.getElementById('liveGrid');
 
-        const q = query(collection(db, "fotos"), where("status", "==", "approved"), orderBy("timestamp", "desc"));
+        // Consulta directa optimizada sin requerir índices compuestos en Firebase
+        const q = query(collection(db, "fotos"), where("status", "==", "approved"));
 
         onSnapshot(q, (snapshot) => {
             liveGrid.innerHTML = '';
