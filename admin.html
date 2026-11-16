@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Protegido - 15 Años Rosibel</title>
+    <title>Panel Protegido - 15 Años Rossibel</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -72,22 +72,48 @@
             display: none;
         }
         #main-panel { display: none; }
-        h1 {
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto 30px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 15px;
+        }
+        .header-titles h1 {
             font-family: 'Cinzel', serif;
             color: #d4af37;
-            text-align: center;
+            margin: 0 0 5px 0;
+            font-size: 1.8rem;
         }
         .subtitle {
-            text-align: center;
             color: #94a3b8;
-            margin-bottom: 30px;
+            margin: 0;
+            font-size: 0.95rem;
         }
+        .btn-logout {
+            background: #475569;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .btn-logout:hover { background: #334155; }
+
         .section-title {
             max-width: 1200px;
-            margin: 40px auto 20px auto;
+            margin: 30px auto 20px auto;
             color: #38bdf8;
-            font-size: 1.4rem;
-            border-bottom: 2px solid #1e293b;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #1e293b;
             padding-bottom: 8px;
             font-family: 'Cinzel', serif;
         }
@@ -153,7 +179,7 @@
     <div id="auth-overlay">
         <div class="auth-card">
             <h2>Acceso Restringido</h2>
-            <p style="color: #94a3b8; font-size: 0.9rem;">Introduce tus credenciales de moderador</p>
+            <p style="color: #94a3b8; font-size: 0.9rem;">15 Años Rossibel</p>
             <input type="text" id="usernameInput" class="auth-input" placeholder="Nombre de Usuario">
             <input type="password" id="pinInput" class="auth-input" placeholder="PIN Secreto">
             <button class="auth-btn" id="loginBtn">Ingresar al Panel</button>
@@ -163,8 +189,13 @@
 
     <!-- PANEL DE CONTROL PRINCIPAL -->
     <div id="main-panel">
-        <h1>Panel de Control Profesional</h1>
-        <div class="subtitle">Modera y controla en tiempo real las fotos del evento</div>
+        <div class="header-container">
+            <div class="header-titles">
+                <h1>Panel de Control Profesional</h1>
+                <div class="subtitle">Moderación en tiempo real • 15 Años Rossibel</div>
+            </div>
+            <button class="btn-logout" id="logoutBtn">Cerrar Sesión</button>
+        </div>
         
         <div class="section-title">📸 Fotos Pendientes de Revisión</div>
         <div class="grid" id="pendingGrid">
@@ -181,18 +212,17 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // CREDENCIALES DE ACCESO
         const ADMIN_USER = "Rafael";
         const ADMIN_PIN = "1947";
 
         const authOverlay = document.getElementById('auth-overlay');
         const mainPanel = document.getElementById('main-panel');
         const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         const usernameInput = document.getElementById('usernameInput');
         const pinInput = document.getElementById('pinInput');
         const authError = document.getElementById('auth-error');
 
-        // Mantener sesión activa en la pestaña actual
         if (sessionStorage.getItem('auth_ok') === 'true') {
             authOverlay.style.display = 'none';
             mainPanel.style.display = 'block';
@@ -207,11 +237,21 @@
                 sessionStorage.setItem('auth_ok', 'true');
                 authOverlay.style.display = 'none';
                 mainPanel.style.display = 'block';
+                usernameInput.value = '';
+                pinInput.value = '';
+                authError.style.display = 'none';
                 iniciarSistemaFirebase();
             } else {
                 authError.style.display = 'block';
                 pinInput.value = '';
             }
+        });
+
+        // Botón de Cerrar Sesión
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('auth_ok');
+            mainPanel.style.display = 'none';
+            authOverlay.style.display = 'flex';
         });
 
         function iniciarSistemaFirebase() {
@@ -230,7 +270,6 @@
             const pendingGrid = document.getElementById('pendingGrid');
             const approvedGrid = document.getElementById('approvedGrid');
 
-            // 1. Escuchar pendientes
             const qPending = query(collection(db, "fotos"), where("status", "==", "pending"));
             onSnapshot(qPending, (snapshot) => {
                 pendingGrid.innerHTML = '';
@@ -258,7 +297,6 @@
                 });
             });
 
-            // 2. Escuchar aprobadas con opción de retirar de pantalla
             const qApproved = query(collection(db, "fotos"), where("status", "==", "approved"));
             onSnapshot(qApproved, (snapshot) => {
                 approvedGrid.innerHTML = '';
