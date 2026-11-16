@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparte tu Foto - 15 Años Rosibel</title>
+    <title>Comparte tu Foto - 15 Años Rossibel</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -149,7 +149,7 @@
         <!-- FORMULARIO DE SUBIDA -->
         <div id="formContainer">
             <h1>Bosque Encantado</h1>
-            <div class="subtitle">MIS 15 AÑOS ROSIBEL</div>
+            <div class="subtitle">MIS 15 AÑOS ROSSIBEL</div>
             
             <form id="uploadForm">
                 <div class="form-group">
@@ -157,7 +157,7 @@
                     <input type="text" id="senderName" required placeholder="Ej. Familia Pérez">
                 </div>
                 <div class="form-group">
-                    <label>Mensaje para Rosibel:</label>
+                    <label>Mensaje para Rossibel:</label>
                     <textarea id="message" required placeholder="Escribe un lindo deseo..."></textarea>
                 </div>
                 <div class="form-group">
@@ -215,7 +215,12 @@
             const fileInput = document.getElementById('imageFile');
             const file = fileInput.files[0];
 
-            if (!file) return;
+            if (!file) {
+                alert("Por favor selecciona una foto.");
+                loading.style.display = 'none';
+                submitBtn.style.display = 'block';
+                return;
+            }
 
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -236,11 +241,17 @@
                     successScreen.style.display = 'block';
 
                 } catch (error) {
-                    console.error("Error al subir:", error);
+                    console.error("Error al subir a Firebase:", error);
                     alert("Hubo un error al enviar la foto. Intenta de nuevo.");
                     loading.style.display = 'none';
                     submitBtn.style.display = 'block';
                 }
+            };
+            
+            reader.onerror = () => {
+                alert("Error al leer el archivo de imagen.");
+                loading.style.display = 'none';
+                submitBtn.style.display = 'block';
             };
         });
 
