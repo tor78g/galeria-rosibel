@@ -11,7 +11,7 @@
             background: radial-gradient(circle at center, #064e3b 0%, #022c22 50%, #000000 100%);
             color: #fff;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             height: 100vh;
             box-sizing: border-box;
             display: flex;
@@ -22,26 +22,26 @@
         .header-banner {
             text-align: center;
             border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 10px;
+            padding-bottom: 8px;
             flex-shrink: 0;
         }
         h1 {
             font-family: 'Cinzel', serif;
             color: #d4af37;
-            font-size: 2.5rem;
-            margin: 0 0 5px 0;
+            font-size: 2.2rem;
+            margin: 0 0 3px 0;
             letter-spacing: 2px;
             text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
         .subtitle {
             color: #6ee7b7;
-            font-size: 1.1rem;
+            font-size: 1rem;
             letter-spacing: 3px;
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
         }
 
-        /* CONTENEDOR DE LA DIAPOSITIVA */
+        /* CONTENEDOR DE LA DIAPOSITIVA MAXIMIZADA */
         .slide-container {
             flex-grow: 1;
             display: flex;
@@ -49,45 +49,46 @@
             align-items: center;
             flex-direction: column;
             position: relative;
-            padding: 10px;
+            padding: 5px;
         }
         .slide-card {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            max-width: 900px;
             width: 100%;
             height: 100%;
-            animation: fadeIn 0.8s ease-in-out;
+            animation: fadeIn 0.6s ease-in-out;
         }
+        /* IMAGEN GIGANTE / MAXIMIZADA */
         .slide-card img {
-            max-width: 100%;
-            max-height: 58vh;
+            max-width: 90vw;
+            max-height: 72vh;
             object-fit: contain;
-            border-radius: 14px;
+            border-radius: 12px;
             border: 3px solid #d4af37;
-            box-shadow: 0 0 35px rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.6);
             background: #000;
         }
+        /* INFORMACIÓN FLOTANTE ABAJO */
         .slide-info {
             text-align: center;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            margin-top: 12px;
+            padding: 8px 20px;
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
             max-width: 800px;
         }
         .slide-info h2 {
             font-family: 'Cinzel', serif;
             color: #d4af37;
-            margin: 0 0 5px 0;
-            font-size: 1.8rem;
+            margin: 0 0 2px 0;
+            font-size: 1.5rem;
         }
         .slide-info p {
             color: #e2e8f0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin: 0;
             font-style: italic;
         }
@@ -95,9 +96,9 @@
         .empty-state {
             text-align: center;
             color: #94a3b8;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-family: 'Cinzel', serif;
-            padding: 50px;
+            padding: 40px;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 16px;
             border: 1px dashed rgba(212, 175, 55, 0.3);
@@ -116,7 +117,7 @@
     </div>
     
     <div class="slide-container" id="slideContainer">
-        <div class="empty-state">Esperando las primeras fotos aprobadas del evento...</div>
+        <div class="empty-state">Conectando y esperando fotos aprobadas...</div>
     </div>
 
     <script type="module">
@@ -149,21 +150,28 @@
                 newPhotos.push(docSnap.data());
             });
 
-            approvedPhotos = newPhotos;
-
-            if (approvedPhotos.length === 0) {
+            if (newPhotos.length === 0) {
+                approvedPhotos = [];
                 slideContainer.innerHTML = '<div class="empty-state">Esperando las primeras fotos aprobadas del evento...</div>';
-                if (slideInterval) clearInterval(slideInterval);
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                    slideInterval = null;
+                }
                 return;
             }
+
+            const wasEmpty = approvedPhotos.length === 0;
+            approvedPhotos = newPhotos;
 
             if (currentIndex >= approvedPhotos.length) {
                 currentIndex = 0;
             }
 
-            if (!slideInterval && approvedPhotos.length > 0) {
+            if (wasEmpty || !slideInterval) {
                 renderCurrentSlide();
-                slideInterval = setInterval(nextSlide, 8000);
+                if (!slideInterval && approvedPhotos.length > 1) {
+                    slideInterval = setInterval(nextSlide, 8000);
+                }
             }
         });
 
@@ -184,12 +192,13 @@
         }
 
         function nextSlide() {
-            if (approvedPhotos.length === 0) return;
+            if (approvedPhotos.length <= 1) return;
             currentIndex = (currentIndex + 1) % approvedPhotos.length;
             renderCurrentSlide();
         }
 
         function escapeHtml(text) {
+            if (!text) return '';
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return text.replace(/[&<>"']/g, m => map[m]);
         }
