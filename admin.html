@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Moderación - 15 Años Rosibel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0f172a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        .card-body h3 {
+            margin: 0 0 5px 0;
+            color: #d4af37;
+            font-size: 1.1rem;
+        }
+        .card-body p {
+            margin: 0 0 15px 0;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-approve {
+            background: #059669;
+            color: white;
+        }
+        .btn-approve:hover { background: #047857; }
+        .btn-reject {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-reject:hover { background: #b91c1c; }
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #94a3b8;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Panel de Control del Supervisor</h1>
+    <div class="subtitle">Aprueba o rechaza las fotos enviadas por los invitados en tiempo real</div>
+    
+    <div class="grid" id="pendingGrid">
+        <div class="empty-state">Cargando fotos pendientes...</div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTjyrFGjq5zr5hqnMT3qZX4sNuWZT3AJQ",
+            authDomain: "rosibel15.firebaseapp.com",
+            projectId: "rosibel15",
+            storageBucket: "rosibel15.firebasestorage.app",
+            messagingSenderId: "1042848632443",
+            appId: "1:1042848632443:web:7b9ebf2da8bb21dd56dcde"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const pendingGrid = document.getElementById('pendingGrid');
+
+        const q = query(collection(db, "fotos"), where("status", "==", "pending"));
+        
+        onSnapshot(q, (snapshot) => {
+            pendingGrid.innerHTML = '';
+            
+            if (snapshot.empty) {
+                pendingGrid.innerHTML = '<div class="empty-state">No hay fotos pendientes de revisión en este momento.</div>';
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const id = docSnap.id;
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${data.imageUrl}" alt="Foto de invitado">
+                    <div class="card-body">
+                        <h3>${escapeHtml(data.senderName)}</h3>
+                        <p>${escapeHtml(data.message)}</p>
+                        <div class="actions">
+                            <button class="btn-approve" onclick="approvePhoto('${id}')">Aprobar</button>
+                            <button class="btn-reject" onclick="rejectPhoto('${id}')">Rechazar</button>
+                        </div>
+                    </div>
+                `;
+                pendingGrid.appendChild(card);
+            });
+        });
+
+        window.approvePhoto = async (id) => {
+            try {
+                const docRef = doc(db, "fotos", id);
+                await updateDoc(docRef, { status: "approved" });
+            } catch (error) {
+                console.error("Error al aprobar:", error);
+                alert("No se pudo aprobar la foto.");
+            }
+        };
+
+        window.rejectPhoto = async (id) => {
+            if (confirm("¿Estás seguro de rechazar y eliminar esta foto?")) {
+                try {
+                    const docRef = doc(db, "fotos", id);
+                    await deleteDoc(docRef);
+                } catch (error) {
+                    console.error("Error al rechazar:", error);
+                    alert("No se pudo eliminar la foto.");
+                }
+            }
+        };
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
+</body>
+</html>
