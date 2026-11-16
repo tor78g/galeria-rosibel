@@ -31,7 +31,7 @@
         }
         .subtitle {
             color: #6ee7b7;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 2px;
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
@@ -45,10 +45,10 @@
         }
         .card {
             background: rgba(15, 23, 42, 0.85);
-            border-radius: 14px;
+            border-radius: 12px;
             overflow: hidden;
             border: 2px solid rgba(212, 175, 55, 0.4);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(8px);
             cursor: pointer;
             transition: transform 0.2s ease, border-color 0.2s ease;
@@ -58,31 +58,32 @@
         .card:active {
             transform: scale(0.98);
         }
+        /* Altura por defecto para PC */
         .card img {
             width: 100%;
-            height: 280px;
+            height: 260px;
             object-fit: cover;
             border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
         .card-body {
-            padding: 15px;
+            padding: 12px 15px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
         .card-body h3 {
-            margin: 0 0 5px 0;
+            margin: 0 0 3px 0;
             color: #d4af37;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-family: 'Cinzel', serif;
         }
         .card-body p {
             margin: 0;
             color: #e2e8f0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-style: italic;
-            line-height: 1.3;
+            line-height: 1.2;
         }
 
         /* VENTANA MODAL / ZOOM A PANTALLA COMPLETA */
@@ -148,19 +149,44 @@
             grid-column: 1 / -1;
             text-align: center;
             color: #94a3b8;
-            font-size: 1.2rem;
-            padding: 50px 20px;
+            font-size: 1.1rem;
+            padding: 40px 20px;
             background: rgba(0, 0, 0, 0.4);
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px dashed rgba(212, 175, 55, 0.3);
             font-family: 'Cinzel', serif;
         }
 
-        /* Ajustes específicos para pantallas grandes (PC / Proyector) */
-        @media (min-width: 768px) {
+        /* OPTIMIZACIÓN EXCLUSIVA PARA MÓVILES (Tarjetas más chicas y compactas) */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr); /* Dos columnas en celulares para aprovechar el espacio lateral */
+                gap: 12px;
+            }
+            .card img {
+                height: 140px; /* Imagen más compacta y estilizada */
+            }
+            .card-body {
+                padding: 8px 10px;
+            }
+            .card-body h3 {
+                font-size: 0.85rem;
+            }
+            .card-body p {
+                font-size: 0.75rem;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+        }
+
+        /* Ajustes para pantallas grandes (PC / Proyector) */
+        @media (min-width: 769px) {
             body { padding: 40px 20px; }
             h1 { font-size: 3rem; }
             .subtitle { font-size: 1.3rem; letter-spacing: 4px; }
+            .card img { height: 260px; }
             .empty-state { font-size: 1.5rem; padding: 80px; }
         }
     </style>
@@ -260,7 +286,7 @@
             }
         });
 
-        function escapeHtml(text) {
+function escapeHtml(text) {
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return text.replace(/[&<>"']/g, m => map[m]);
         }
