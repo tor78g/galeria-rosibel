@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Moderación - 15 Años Rosibel</title>
+    <title>Panel Protegido - 15 Años Rosibel</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -13,6 +13,65 @@
             margin: 0;
             padding: 20px;
         }
+        #auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .auth-card {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid #d4af37;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .auth-card h2 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            margin-top: 0;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #fff;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .auth-btn {
+            background: #d4af37;
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .auth-btn:hover { background: #b89728; }
+        #auth-error {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+        }
+        #main-panel { display: none; }
         h1 {
             font-family: 'Cinzel', serif;
             color: #d4af37;
@@ -22,6 +81,15 @@
             text-align: center;
             color: #94a3b8;
             margin-bottom: 30px;
+        }
+        .section-title {
+            max-width: 1200px;
+            margin: 40px auto 20px auto;
+            color: #38bdf8;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 8px;
+            font-family: 'Cinzel', serif;
         }
         .grid {
             display: grid;
@@ -42,9 +110,7 @@
             height: 200px;
             object-fit: cover;
         }
-        .card-body {
-            padding: 15px;
-        }
+        .card-body { padding: 15px; }
         .card-body h3 {
             margin: 0 0 5px 0;
             color: #d4af37;
@@ -55,10 +121,7 @@
             color: #cbd5e1;
             font-size: 0.9rem;
         }
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
+        .actions { display: flex; gap: 10px; }
         button {
             flex: 1;
             padding: 10px;
@@ -66,107 +129,189 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
+            font-size: 0.9rem;
         }
-        .btn-approve {
-            background: #059669;
-            color: white;
-        }
+        .btn-approve { background: #059669; color: white; }
         .btn-approve:hover { background: #047857; }
-        .btn-reject {
-            background: #dc2626;
-            color: white;
-        }
+        .btn-reject { background: #dc2626; color: white; }
         .btn-reject:hover { background: #b91c1c; }
+        .btn-revoke { background: #d97706; color: white; }
+        .btn-revoke:hover { background: #b45309; }
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
             color: #94a3b8;
-            padding: 40px;
+            padding: 30px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <h1>Panel de Control del Supervisor</h1>
-    <div class="subtitle">Aprueba o rechaza las fotos enviadas por los invitados en tiempo real</div>
-    
-    <div class="grid" id="pendingGrid">
-        <div class="empty-state">Cargando fotos pendientes...</div>
+
+    <!-- CAPA DE SEGURIDAD (USUARIO Y PIN) -->
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h2>Acceso Restringido</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem;">Introduce tus credenciales de moderador</p>
+            <input type="text" id="usernameInput" class="auth-input" placeholder="Nombre de Usuario">
+            <input type="password" id="pinInput" class="auth-input" placeholder="PIN Secreto">
+            <button class="auth-btn" id="loginBtn">Ingresar al Panel</button>
+            <div id="auth-error">Usuario o PIN incorrecto.</div>
+        </div>
+    </div>
+
+    <!-- PANEL DE CONTROL PRINCIPAL -->
+    <div id="main-panel">
+        <h1>Panel de Control Profesional</h1>
+        <div class="subtitle">Modera y controla en tiempo real las fotos del evento</div>
+        
+        <div class="section-title">📸 Fotos Pendientes de Revisión</div>
+        <div class="grid" id="pendingGrid">
+            <div class="empty-state">Cargando fotos pendientes...</div>
+        </div>
+
+        <div class="section-title">✨ Fotos Activas en Pantalla (Aprobadas)</div>
+        <div class="grid" id="approvedGrid">
+            <div class="empty-state">No hay fotos proyectándose actualmente.</div>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCTjyrFGjq5zr5hqnMT3qZX4sNuWZT3AJQ",
-            authDomain: "rosibel15.firebaseapp.com",
-            projectId: "rosibel15",
-            storageBucket: "rosibel15.firebasestorage.app",
-            messagingSenderId: "1042848632443",
-            appId: "1:1042848632443:web:7b9ebf2da8bb21dd56dcde"
-        };
+        // CREDENCIALES DE ACCESO
+        const ADMIN_USER = "Rafael";
+        const ADMIN_PIN = "1947";
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const authOverlay = document.getElementById('auth-overlay');
+        const mainPanel = document.getElementById('main-panel');
+        const loginBtn = document.getElementById('loginBtn');
+        const usernameInput = document.getElementById('usernameInput');
+        const pinInput = document.getElementById('pinInput');
+        const authError = document.getElementById('auth-error');
 
-        const pendingGrid = document.getElementById('pendingGrid');
+        // Mantener sesión activa en la pestaña actual
+        if (sessionStorage.getItem('auth_ok') === 'true') {
+            authOverlay.style.display = 'none';
+            mainPanel.style.display = 'block';
+            iniciarSistemaFirebase();
+        }
 
-        const q = query(collection(db, "fotos"), where("status", "==", "pending"));
-        
-        onSnapshot(q, (snapshot) => {
-            pendingGrid.innerHTML = '';
-            
-            if (snapshot.empty) {
-                pendingGrid.innerHTML = '<div class="empty-state">No hay fotos pendientes de revisión en este momento.</div>';
-                return;
+        loginBtn.addEventListener('click', () => {
+            const userVal = usernameInput.value.trim();
+            const pinVal = pinInput.value.trim();
+
+            if (userVal === ADMIN_USER && pinVal === ADMIN_PIN) {
+                sessionStorage.setItem('auth_ok', 'true');
+                authOverlay.style.display = 'none';
+                mainPanel.style.display = 'block';
+                iniciarSistemaFirebase();
+            } else {
+                authError.style.display = 'block';
+                pinInput.value = '';
             }
-
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const id = docSnap.id;
-
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <img src="${data.imageUrl}" alt="Foto de invitado">
-                    <div class="card-body">
-                        <h3>${escapeHtml(data.senderName)}</h3>
-                        <p>${escapeHtml(data.message)}</p>
-                        <div class="actions">
-                            <button class="btn-approve" onclick="approvePhoto('${id}')">Aprobar</button>
-                            <button class="btn-reject" onclick="rejectPhoto('${id}')">Rechazar</button>
-                        </div>
-                    </div>
-                `;
-                pendingGrid.appendChild(card);
-            });
         });
 
-        window.approvePhoto = async (id) => {
-            try {
-                const docRef = doc(db, "fotos", id);
-                await updateDoc(docRef, { status: "approved" });
-            } catch (error) {
-                console.error("Error al aprobar:", error);
-                alert("No se pudo aprobar la foto.");
-            }
-        };
+        function iniciarSistemaFirebase() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyCTjyrFGjq5zr5hqnMT3qZX4sNuWZT3AJQ",
+                authDomain: "rosibel15.firebaseapp.com",
+                projectId: "rosibel15",
+                storageBucket: "rosibel15.firebasestorage.app",
+                messagingSenderId: "1042848632443",
+                appId: "1:1042848632443:web:7b9ebf2da8bb21dd56dcde"
+            };
 
-        window.rejectPhoto = async (id) => {
-            if (confirm("¿Estás seguro de rechazar y eliminar esta foto?")) {
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+
+            const pendingGrid = document.getElementById('pendingGrid');
+            const approvedGrid = document.getElementById('approvedGrid');
+
+            // 1. Escuchar pendientes
+            const qPending = query(collection(db, "fotos"), where("status", "==", "pending"));
+            onSnapshot(qPending, (snapshot) => {
+                pendingGrid.innerHTML = '';
+                if (snapshot.empty) {
+                    pendingGrid.innerHTML = '<div class="empty-state">No hay fotos pendientes de revisión.</div>';
+                    return;
+                }
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${data.imageUrl}" alt="Foto pendiente">
+                        <div class="card-body">
+                            <h3>${escapeHtml(data.senderName)}</h3>
+                            <p>"${escapeHtml(data.message)}"</p>
+                            <div class="actions">
+                                <button class="btn-approve" onclick="updateStatus('${id}', 'approved')">Aprobar</button>
+                                <button class="btn-reject" onclick="deletePhoto('${id}')">Rechazar</button>
+                            </div>
+                        </div>
+                    `;
+                    pendingGrid.appendChild(card);
+                });
+            });
+
+            // 2. Escuchar aprobadas con opción de retirar de pantalla
+            const qApproved = query(collection(db, "fotos"), where("status", "==", "approved"));
+            onSnapshot(qApproved, (snapshot) => {
+                approvedGrid.innerHTML = '';
+                if (snapshot.empty) {
+                    approvedGrid.innerHTML = '<div class="empty-state">No hay fotos proyectándose actualmente.</div>';
+                    return;
+                }
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${data.imageUrl}" alt="Foto aprobada">
+                        <div class="card-body">
+                            <h3>${escapeHtml(data.senderName)}</h3>
+                            <p>"${escapeHtml(data.message)}"</p>
+                            <div class="actions">
+                                <button class="btn-revoke" onclick="updateStatus('${id}', 'pending')">Retirar de Pantalla</button>
+                                <button class="btn-reject" onclick="deletePhoto('${id}')">Eliminar</button>
+                            </div>
+                        </div>
+                    `;
+                    approvedGrid.appendChild(card);
+                });
+            });
+
+            window.updateStatus = async (id, newStatus) => {
                 try {
                     const docRef = doc(db, "fotos", id);
-                    await deleteDoc(docRef);
+                    await updateDoc(docRef, { status: newStatus });
                 } catch (error) {
-                    console.error("Error al rechazar:", error);
-                    alert("No se pudo eliminar la foto.");
+                    console.error("Error al actualizar estado:", error);
+                    alert("No se pudo actualizar el estado de la foto.");
                 }
-            }
-        };
+            };
 
-        function escapeHtml(text) {
-            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-            return text.replace(/[&<>"']/g, m => map[m]);
+            window.deletePhoto = async (id) => {
+                if (confirm("¿Estás seguro de eliminar permanentemente esta foto?")) {
+                    try {
+                        const docRef = doc(db, "fotos", id);
+                        await deleteDoc(docRef);
+                    } catch (error) {
+                        console.error("Error al eliminar:", error);
+                        alert("No se pudo eliminar la foto.");
+                    }
+                }
+            };
+
+            function escapeHtml(text) {
+                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+                return text.replace(/[&<>"']/g, m => map[m]);
+            }
         }
     </script>
 </body>
