@@ -3,19 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>15 Años Rosibel - Subir Foto en Vivo</title>
+    <title>Comparte tu Foto - 15 Años Rosibel</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #064e3b;
-            --accent: #d4af37;
-            --bg: #022c22;
-            --card-bg: rgba(255, 255, 255, 0.95);
-        }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, var(--bg), var(--primary));
-            color: #1f2937;
+            background: radial-gradient(circle, #022c22, #000000);
+            color: #fff;
             margin: 0;
             padding: 20px;
             min-height: 100vh;
@@ -24,28 +18,28 @@
             align-items: center;
         }
         .container {
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 20px;
             padding: 30px;
-            border: 2px solid var(--accent);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
             box-sizing: border-box;
         }
         h1 {
             font-family: 'Cinzel', serif;
-            color: var(--primary);
+            color: #d4af37;
             text-align: center;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             margin-bottom: 5px;
         }
         .subtitle {
             text-align: center;
-            color: var(--accent);
-            font-size: 0.95rem;
+            color: #6ee7b7;
+            font-size: 0.9rem;
             margin-bottom: 25px;
-            font-weight: 600;
             letter-spacing: 1px;
         }
         .form-group {
@@ -54,66 +48,137 @@
         label {
             display: block;
             margin-bottom: 8px;
+            color: #e2e8f0;
             font-weight: 600;
             font-size: 0.9rem;
-            color: var(--primary);
         }
-        input[type="text"], input[type="file"] {
+        input[type="text"], textarea, input[type="file"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid #d1d5db;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
             border-radius: 8px;
-            font-size: 1rem;
             box-sizing: border-box;
+            font-family: inherit;
         }
+        textarea { resize: vertical; height: 80px; }
         input[type="file"] {
-            background: #f9fafb;
+            padding: 8px;
             cursor: pointer;
         }
-        button {
-            background: var(--accent);
+        .btn-submit {
+            background: linear-gradient(135deg, #d4af37, #aa7c11);
             color: #000;
             border: none;
             width: 100%;
             padding: 14px;
             border-radius: 8px;
-            font-weight: 700;
+            font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: opacity 0.2s;
+            font-family: 'Cinzel', serif;
         }
-        button:hover {
-            background: #e6c547;
-        }
-        #status-msg {
+        .btn-submit:hover { opacity: 0.9; }
+        #loading {
+            display: none;
             text-align: center;
+            color: #6ee7b7;
             margin-top: 15px;
             font-weight: 600;
+        }
+        
+        /* PANTALLA DE AGRADECIMIENTO PROFESIONAL */
+        #successScreen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+        #successScreen h2 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+        #successScreen p {
+            color: #e2e8f0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .btn-another {
+            background: transparent;
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 15px;
+        }
+        .btn-another:hover {
+            background: #d4af37;
+            color: #000;
+        }
+        .keep-sharing-link {
+            color: #6ee7b7;
             font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 5px;
+            border-bottom: 1px dashed #6ee7b7;
+            padding-bottom: 2px;
+            transition: color 0.2s;
+        }
+        .keep-sharing-link:hover {
+            color: #34d399;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Bosque Encantado</h1>
-        <div class="subtitle">15 Años de Rosibel</div>
         
-        <form id="uploadForm">
-            <div class="form-group">
-                <label for="guestName">Tu Nombre o Familia:</label>
-                <input type="text" id="guestName" required placeholder="Ej. Familia Pérez / Tío Carlos">
+        <!-- FORMULARIO DE SUBIDA -->
+        <div id="formContainer">
+            <h1>Bosque Encantado</h1>
+            <div class="subtitle">MIS 15 AÑOS ROSIBEL</div>
+            
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label>Tu Nombre o Familia:</label>
+                    <input type="text" id="senderName" required placeholder="Ej. Familia Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Mensaje para Rosibel:</label>
+                    <textarea id="message" required placeholder="Escribe un lindo deseo..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Selecciona tu Foto:</label>
+                    <input type="file" id="imageFile" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn-submit" id="submitBtn">Enviar al Muro</button>
+                <div id="loading">Subiendo recuerdo al sistema...</div>
+            </form>
+        </div>
+
+        <!-- PANTALLA DE AGRADECIMIENTO PROFESIONAL -->
+        <div id="successScreen">
+            <h2>¡Muchas Gracias!</h2>
+            <p>Gracias por compartir momentos importantes en mi celebración de 15 Años.</p>
+            <button class="btn-another" id="resetBtn">Subir otra foto</button>
+            <div>
+                <a href="#" class="keep-sharing-link" id="keepSharingLink">✨ Sigue compartiendo momentos</a>
             </div>
-            <div class="form-group">
-                <label for="guestMessage">Mensaje para Rosibel (Opcional):</label>
-                <input type="text" id="guestMessage" placeholder="¡Felices 15 años!">
-            </div>
-            <div class="form-group">
-                <label for="photoFile">Elige tu foto:</label>
-                <input type="file" id="photoFile" accept="image/*" required>
-            </div>
-            <button type="submit" id="submitBtn">Enviar Foto a la Pantalla</button>
-        </form>
-        <div id="status-msg"></div>
+        </div>
+
     </div>
 
     <script type="module">
@@ -134,53 +199,60 @@
 
         const uploadForm = document.getElementById('uploadForm');
         const submitBtn = document.getElementById('submitBtn');
-        const statusMsg = document.getElementById('status-msg');
+        const loading = document.getElementById('loading');
+        const formContainer = document.getElementById('formContainer');
+        const successScreen = document.getElementById('successScreen');
+        const resetBtn = document.getElementById('resetBtn');
+        const keepSharingLink = document.getElementById('keepSharingLink');
 
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('guestName').value;
-            const message = document.getElementById('guestMessage').value;
-            const fileInput = document.getElementById('photoFile');
+            submitBtn.style.display = 'none';
+            loading.style.display = 'block';
+
+            const senderName = document.getElementById('senderName').value;
+            const message = document.getElementById('message').value;
+            const fileInput = document.getElementById('imageFile');
             const file = fileInput.files[0];
 
             if (!file) return;
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Procesando foto...';
-            statusMsg.style.color = '#064e3b';
-            statusMsg.textContent = 'Preparando imagen...';
-
-            try {
-                // Convertir la imagen a Base64 para guardarla directo en Firestore sin Storage
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                
-                reader.onload = async function () {
-                    const base64Image = reader.result;
-
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64Image = reader.result;
+                try {
                     await addDoc(collection(db, "fotos"), {
-                        senderName: name,
-                        message: message || "¡Felices 15 años!",
+                        senderName: senderName,
+                        message: message,
                         imageUrl: base64Image,
                         status: "pending",
                         timestamp: Date.now()
                     });
 
-                    statusMsg.style.color = '#059669';
-                    statusMsg.textContent = '¡Foto enviada con éxito! Pronto aparecerá en el evento.';
+                    loading.style.display = 'none';
                     uploadForm.reset();
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Enviar Foto a la Pantalla';
-                };
+                    formContainer.style.display = 'none';
+                    successScreen.style.display = 'block';
 
-            } catch (error) {
-                console.error("Error al subir:", error);
-                statusMsg.style.color = '#dc2626';
-                statusMsg.textContent = 'Hubo un error al enviar la foto. Inténtalo de nuevo.';
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Enviar Foto a la Pantalla';
-            }
+                } catch (error) {
+                    console.error("Error al subir:", error);
+                    alert("Hubo un error al enviar la foto. Intenta de nuevo.");
+                    loading.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                }
+            };
         });
+
+        const reiniciarFormulario = (e) => {
+            if(e) e.preventDefault();
+            successScreen.style.display = 'none';
+            formContainer.style.display = 'block';
+            submitBtn.style.display = 'block';
+        };
+
+        resetBtn.addEventListener('click', reiniciarFormulario);
+        keepSharingLink.addEventListener('click', reiniciarFormulario);
     </script>
 </body>
 </html>
