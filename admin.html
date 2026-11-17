@@ -16,11 +16,86 @@
             box-sizing: border-box;
         }
 
+        /* PANTALLA DE LOGIN */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 44, 34, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .login-box {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 35px 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(110, 231, 183, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        .login-box h2 {
+            font-family: 'Cinzel', serif;
+            color: #ffd700;
+            margin-top: 0;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(2, 44, 34, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .login-box button {
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            color: #000;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1rem;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        #loginError {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        #adminMainContent {
+            display: none;
+        }
+
         .header-banner {
             text-align: center;
             margin-bottom: 25px;
             border-bottom: 2px solid rgba(212, 175, 55, 0.4);
             padding-bottom: 15px;
+            position: relative;
         }
 
         h1 {
@@ -38,6 +113,27 @@
             letter-spacing: 3px;
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
+        }
+
+        .logout-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid #ef4444;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #ef4444;
+            color: #fff;
         }
 
         /* PESTAÑAS DE NAVEGACIÓN ADMIN */
@@ -200,11 +296,11 @@
             font-family: 'Cinzel', serif;
         }
 
-        /* MODAL PARA VER FOTO EN GRANDE */
+        /* MODAL DE AMPLIACIÓN DE IMAGEN */
         #imageModal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 3000;
             left: 0;
             top: 0;
             width: 100%;
@@ -242,28 +338,44 @@
 </head>
 <body>
 
-    <div class="header-banner">
-        <h1>Panel de Control</h1>
-        <div class="subtitle">MODERACIÓN DE FOTOS • BOSQUE ENCANTADO</div>
-    </div>
-
-    <!-- BOTONES DE PESTAÑAS -->
-    <div class="admin-tabs">
-        <button class="tab-btn active" id="tabPendientesBtn">📸 Pendientes (<span id="countPendientes">0</span>)</button>
-        <button class="tab-btn" id="tabAprobadasBtn">✨ Aprobadas en Galería (<span id="countAprobadas">0</span>)</button>
-    </div>
-
-    <!-- SECCIÓN DE FOTOS PENDIENTES -->
-    <div class="section-container active" id="sectionPendientes">
-        <div class="grid" id="adminGridPendientes">
-            <div class="empty-state">No hay fotos pendientes de aprobación. ✨</div>
+    <!-- PANTALLA DE ACCESO (LOGIN) -->
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h2>Acceso Administrador</h2>
+            <form id="loginForm">
+                <input type="password" id="adminPassword" placeholder="Contraseña de acceso" required>
+                <button type="submit">Entrar al Panel 🔒</button>
+                <div id="loginError">Contraseña incorrecta. Intenta de nuevo.</div>
+            </form>
         </div>
     </div>
 
-    <!-- SECCIÓN DE FOTOS APROBADAS -->
-    <div class="section-container" id="sectionAprobadas">
-        <div class="grid" id="adminGridAprobadas">
-            <div class="empty-state">No hay fotos aprobadas todavía. 🌿</div>
+    <!-- CONTENIDO PRINCIPAL DEL ADMIN -->
+    <div id="adminMainContent">
+        <div class="header-banner">
+            <button class="logout-btn" id="logoutBtn">Cerrar Sesión 🚪</button>
+            <h1>Panel de Control</h1>
+            <div class="subtitle">MODERACIÓN DE FOTOS • BOSQUE ENCANTADO</div>
+        </div>
+
+        <!-- BOTONES DE PESTAÑAS -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" id="tabPendientesBtn">📸 Pendientes (<span id="countPendientes">0</span>)</button>
+            <button class="tab-btn" id="tabAprobadasBtn">✨ Aprobadas en Galería (<span id="countAprobadas">0</span>)</button>
+        </div>
+
+        <!-- SECCIÓN DE FOTOS PENDIENTES -->
+        <div class="section-container active" id="sectionPendientes">
+            <div class="grid" id="adminGridPendientes">
+                <div class="empty-state">No hay fotos pendientes de aprobación. ✨</div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE FOTOS APROBADAS -->
+        <div class="section-container" id="sectionAprobadas">
+            <div class="grid" id="adminGridAprobadas">
+                <div class="empty-state">No hay fotos aprobadas todavía. 🌿</div>
+            </div>
         </div>
     </div>
 
@@ -276,6 +388,39 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // CONTRASEÑA CONFIGURADA
+        const ADMIN_PASS = "1947";
+
+        const loginOverlay = document.getElementById('loginOverlay');
+        const loginForm = document.getElementById('loginForm');
+        const adminPassword = document.getElementById('adminPassword');
+        const loginError = document.getElementById('loginError');
+        const adminMainContent = document.getElementById('adminMainContent');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Verificar si ya inició sesión en esta pestaña
+        if (sessionStorage.getItem("adminLoggedIn") === "true") {
+            loginOverlay.style.display = 'none';
+            adminMainContent.style.display = 'block';
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (adminPassword.value === ADMIN_PASS) {
+                sessionStorage.setItem("adminLoggedIn", "true");
+                loginOverlay.style.display = 'none';
+                adminMainContent.style.display = 'block';
+            } else {
+                loginError.style.display = 'block';
+                adminPassword.value = '';
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem("adminLoggedIn");
+            location.reload();
+        });
 
         const firebaseConfig = {
             apiKey: "AIzaSyCTjyrFGjq5zr5hqnMT3qZX4sNuWZT3AJQ",
