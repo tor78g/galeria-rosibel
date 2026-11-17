@@ -45,7 +45,7 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .tab-btn {
@@ -121,20 +121,6 @@
             font-style: italic;
         }
 
-        .video-link-box {
-            background: rgba(2, 44, 34, 0.6);
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            word-break: break-all;
-        }
-
-        .video-link-box a {
-            color: #34d399;
-            font-size: 0.85rem;
-            text-decoration: underline;
-        }
-
         .card-actions {
             padding: 12px 15px;
             background: rgba(2, 44, 34, 0.4);
@@ -158,6 +144,24 @@
 
         .btn-approve:hover {
             background: #059669;
+            color: #fff;
+        }
+
+        .btn-revert {
+            background: #f59e0b;
+            color: #000;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            flex: 1;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            transition: background 0.2s;
+        }
+
+        .btn-revert:hover {
+            background: #d97706;
             color: #fff;
         }
 
@@ -195,26 +199,26 @@
 
     <div class="header-banner">
         <h1>Panel de Control</h1>
-        <div class="subtitle">MODERACIÓN DE CONTENIDO • BOSQUE ENCANTADO</div>
+        <div class="subtitle">MODERACIÓN DE FOTOS • BOSQUE ENCANTADO</div>
     </div>
 
     <!-- BOTONES DE PESTAÑAS -->
     <div class="admin-tabs">
-        <button class="tab-btn active" id="tabFotosBtn">📸 Moderar Fotos (<span id="countFotos">0</span>)</button>
-        <button class="tab-btn" id="tabVideosBtn">🎥 Moderar Videos (<span id="countVideos">0</span>)</button>
+        <button class="tab-btn active" id="tabPendientesBtn">📸 Pendientes (<span id="countPendientes">0</span>)</button>
+        <button class="tab-btn" id="tabAprobadasBtn">✨ Aprobadas en Galería (<span id="countAprobadas">0</span>)</button>
     </div>
 
     <!-- SECCIÓN DE FOTOS PENDIENTES -->
-    <div class="section-container active" id="sectionFotos">
-        <div class="grid" id="adminGridFotos">
+    <div class="section-container active" id="sectionPendientes">
+        <div class="grid" id="adminGridPendientes">
             <div class="empty-state">No hay fotos pendientes de aprobación. ✨</div>
         </div>
     </div>
 
-    <!-- SECCIÓN DE VIDEOS PENDIENTES -->
-    <div class="section-container" id="sectionVideos">
-        <div class="grid" id="adminGridVideos">
-            <div class="empty-state">No hay saludos en video pendientes de aprobación. 🎥</div>
+    <!-- SECCIÓN DE FOTOS APROBADAS (CON OPCIÓN DE REVERTIR O ELIMINAR) -->
+    <div class="section-container" id="sectionAprobadas">
+        <div class="grid" id="adminGridAprobadas">
+            <div class="empty-state">No hay fotos aprobadas todavía. 🌿</div>
         </div>
     </div>
 
@@ -235,37 +239,37 @@
         const db = getFirestore(app);
 
         // Control de Pestañas
-        const tabFotosBtn = document.getElementById('tabFotosBtn');
-        const tabVideosBtn = document.getElementById('tabVideosBtn');
-        const sectionFotos = document.getElementById('sectionFotos');
-        const sectionVideos = document.getElementById('sectionVideos');
+        const tabPendientesBtn = document.getElementById('tabPendientesBtn');
+        const tabAprobadasBtn = document.getElementById('tabAprobadasBtn');
+        const sectionPendientes = document.getElementById('sectionPendientes');
+        const sectionAprobadas = document.getElementById('sectionAprobadas');
 
-        tabFotosBtn.addEventListener('click', () => {
-            tabFotosBtn.classList.add('active');
-            tabVideosBtn.classList.remove('active');
-            sectionFotos.classList.add('active');
-            sectionVideos.classList.remove('active');
+        tabPendientesBtn.addEventListener('click', () => {
+            tabPendientesBtn.classList.add('active');
+            tabAprobadasBtn.classList.remove('active');
+            sectionPendientes.classList.add('active');
+            sectionAprobadas.classList.remove('active');
         });
 
-        tabVideosBtn.addEventListener('click', () => {
-            tabVideosBtn.classList.add('active');
-            tabFotosBtn.classList.remove('active');
-            sectionVideos.classList.add('active');
-            sectionFotos.classList.remove('active');
+        tabAprobadasBtn.addEventListener('click', () => {
+            tabAprobadasBtn.classList.add('active');
+            tabPendientesBtn.classList.remove('active');
+            sectionAprobadas.classList.add('active');
+            sectionPendientes.classList.remove('active');
         });
 
-        const adminGridFotos = document.getElementById('adminGridFotos');
-        const adminGridVideos = document.getElementById('adminGridVideos');
-        const countFotos = document.getElementById('countFotos');
-        const countVideos = document.getElementById('countVideos');
+        const adminGridPendientes = document.getElementById('adminGridPendientes');
+        const adminGridAprobadas = document.getElementById('adminGridAprobadas');
+        const countPendientes = document.getElementById('countPendientes');
+        const countAprobadas = document.getElementById('countAprobadas');
 
         // Escuchar Fotos Pendientes
         onSnapshot(query(collection(db, "fotos"), where("status", "==", "pending")), (snapshot) => {
-            adminGridFotos.innerHTML = '';
-            countFotos.textContent = snapshot.size;
+            adminGridPendientes.innerHTML = '';
+            countPendientes.textContent = snapshot.size;
 
             if (snapshot.empty) {
-                adminGridFotos.innerHTML = '<div class="empty-state">No hay fotos pendientes de aprobación. ✨</div>';
+                adminGridPendientes.innerHTML = '<div class="empty-state">No hay fotos pendientes de aprobación. ✨</div>';
                 return;
             }
 
@@ -295,17 +299,17 @@
                     }
                 });
 
-                adminGridFotos.appendChild(card);
+                adminGridPendientes.appendChild(card);
             });
         });
 
-        // Escuchar Videos Pendientes
-        onSnapshot(query(collection(db, "videos"), where("status", "==", "pending")), (snapshot) => {
-            adminGridVideos.innerHTML = '';
-            countVideos.textContent = snapshot.size;
+        // Escuchar Fotos Aprobadas (con opción de revertir o eliminar)
+        onSnapshot(query(collection(db, "fotos"), where("status", "==", "approved")), (snapshot) => {
+            adminGridAprobadas.innerHTML = '';
+            countAprobadas.textContent = snapshot.size;
 
             if (snapshot.empty) {
-                adminGridVideos.innerHTML = '<div class="empty-state">No hay saludos en video pendientes de aprobación. 🎥</div>';
+                adminGridAprobadas.innerHTML = '<div class="empty-state">No hay fotos aprobadas todavía. 🌿</div>';
                 return;
             }
 
@@ -314,31 +318,30 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <div class="card-body" style="padding-top:20px;">
+                    <img src="${data.imageUrl}" alt="Foto aprobada">
+                    <div class="card-body">
                         <h3>${escapeHtml(data.senderName)}</h3>
                         <p>"${escapeHtml(data.message)}"</p>
-                        <div class="video-link-box">
-                            <strong>Enlace:</strong><br>
-                            <a href="${data.videoUrl}" target="_blank">${data.videoUrl}</a>
-                        </div>
                     </div>
                     <div class="card-actions">
-                        <button class="btn-approve" data-id="${docSnap.id}">Aprobar 🎥</button>
-                        <button class="btn-delete" data-id="${docSnap.id}">Rechazar 🗑️</button>
+                        <button class="btn-revert" data-id="${docSnap.id}">Revertir ↩️</button>
+                        <button class="btn-delete" data-id="${docSnap.id}">Eliminar 🗑️</button>
                     </div>
                 `;
 
-                card.querySelector('.btn-approve').addEventListener('click', async () => {
-                    await updateDoc(doc(db, "videos", docSnap.id), { status: "approved" });
-                });
-
-                card.querySelector('.btn-delete').addEventListener('click', async () => {
-                    if (confirm("¿Estás seguro de rechazar y eliminar este video?")) {
-                        await deleteDoc(doc(db, "videos", docSnap.id));
+                card.querySelector('.btn-revert').addEventListener('click', async () => {
+                    if (confirm("¿Deseas devolver esta foto a pendientes?")) {
+                        await updateDoc(doc(db, "fotos", docSnap.id), { status: "pending" });
                     }
                 });
 
-                adminGridVideos.appendChild(card);
+                card.querySelector('.btn-delete').addEventListener('click', async () => {
+                    if (confirm("¿Estás seguro de eliminar permanentemente esta foto de la galería?")) {
+                        await deleteDoc(doc(db, "fotos", docSnap.id));
+                    }
+                });
+
+                adminGridAprobadas.appendChild(card);
             });
         });
 
