@@ -18,41 +18,43 @@
             overflow-x: hidden;
         }
 
-        /* LUCIÉRNAGAS FLOTANDO POR ENCIMA DE TODO (INCLUYENDO TÍTULOS Y ENCABEZADO) */
-        .magic-particle {
-            position: fixed;
-            background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(52,211,153,0.8) 50%, transparent 100%);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: floatParticle linear infinite;
-            box-shadow: 0 0 12px rgba(255,215,0,0.9), 0 0 20px rgba(52,211,153,0.6);
-            z-index: 999; /* Por encima del texto y el encabezado */
-        }
-
-        @keyframes floatParticle {
-            0% {
-                transform: translateY(105vh) translateX(0) scale(0.6);
-                opacity: 0;
-            }
-            15% {
-                opacity: 0.9;
-            }
-            85% {
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(-10vh) translateX(60px) scale(1.6);
-                opacity: 0;
-            }
-        }
-
         .header-banner {
             text-align: center;
             margin-bottom: 30px;
             border-bottom: 2px solid rgba(212, 175, 55, 0.4);
-            padding-bottom: 20px;
+            padding: 30px 15px 25px 15px;
             position: relative;
-            z-index: 10;
+            overflow: hidden; /* Mantiene las luciérnagas confinadas en la parte superior */
+            border-radius: 0 0 16px 16px;
+            background: rgba(2, 44, 34, 0.3);
+        }
+
+        /* LUCIÉRNAGAS CONFINADAS Y FLOTANDO SOLO EN EL ENCABEZADO */
+        .magic-particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(52,211,153,0.8) 50%, transparent 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatParticle linear infinite;
+            box-shadow: 0 0 10px rgba(255,215,0,0.9), 0 0 18px rgba(52,211,153,0.6);
+            z-index: 1;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(120px) translateX(0) scale(0.6);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.9;
+            }
+            80% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-30px) translateX(40px) scale(1.4);
+                opacity: 0;
+            }
         }
 
         h1 {
@@ -62,6 +64,8 @@
             margin: 0 0 5px 0;
             letter-spacing: 2px;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            position: relative;
+            z-index: 2;
         }
 
         .subtitle {
@@ -71,13 +75,15 @@
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
             text-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+            position: relative;
+            z-index: 2;
         }
 
         /* BOTÓN FLOTANTE ESTILIZADO */
         .btn-subir-flotante {
             position: absolute;
-            top: 0;
-            right: 10px;
+            top: 20px;
+            right: 20px;
             background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
             color: #000;
             font-family: 'Cinzel', serif;
@@ -91,7 +97,7 @@
             align-items: center;
             gap: 6px;
             transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 11;
+            z-index: 3;
         }
 
         .btn-subir-flotante:hover {
@@ -252,9 +258,14 @@
         }
 
         @media (max-width: 768px) {
+            .header-banner {
+                padding: 20px 10px;
+            }
             .btn-subir-flotante {
                 position: relative;
-                margin-top: 12px;
+                top: auto;
+                right: auto;
+                margin: 12px auto 0 auto;
                 display: inline-flex;
             }
             .grid {
@@ -278,29 +289,30 @@
 </head>
 <body>
 
-    <!-- GENERADOR DE LUCIÉRNAGAS SOBRE TODA LA PANTALLA -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const particleCount = 35;
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'magic-particle';
-                const size = Math.random() * 10 + 8;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.animationDuration = `${Math.random() * 4 + 3}s`;
-                particle.style.animationDelay = `${Math.random() * 4}s`;
-                document.body.appendChild(particle);
-            }
-        });
-    </script>
-
-    <div class="header-banner">
+    <div class="header-banner" id="bannerHeader">
         <a href="index.html" class="btn-subir-flotante">📸 Subir Otra Foto</a>
         <h1>Bosque Encantado</h1>
         <div class="subtitle">MIS 15 AÑOS ROSSIBEL • GALERÍA EN VIVO</div>
     </div>
+
+    <!-- SCRIPT DE LUCIÉRNAGAS DENTRO DEL ENCABEZADO -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const banner = document.getElementById('bannerHeader');
+            const particleCount = 20;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'magic-particle';
+                const size = Math.random() * 8 + 6;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDuration = `${Math.random() * 3 + 2.5}s`;
+                particle.style.animationDelay = `${Math.random() * 3}s`;
+                banner.appendChild(particle);
+            }
+        });
+    </script>
     
     <div class="grid" id="liveGrid">
         <div class="empty-state">Esperando las primeras fotos mágicas del evento... ✨</div>
