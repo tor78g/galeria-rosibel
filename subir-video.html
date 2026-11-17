@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bosque Encantado - 15 Años Rossibel</title>
+    <title>Enviar Saludo en Video - 15 Años Rossibel</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -76,7 +76,7 @@
         h1 {
             font-family: 'Cinzel', serif;
             color: #ffd700;
-            font-size: 2.3rem;
+            font-size: 2.1rem;
             margin: 0 0 5px 0;
             letter-spacing: 2px;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
@@ -86,8 +86,8 @@
 
         .subtitle {
             color: #34d399;
-            font-size: 0.9rem;
-            letter-spacing: 4px;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
             margin: 0;
@@ -117,7 +117,7 @@
             letter-spacing: 1px;
         }
 
-        input[type="text"], textarea, input[type="file"] {
+        input[type="text"], textarea, input[type="url"] {
             width: 100%;
             padding: 12px 15px;
             background: rgba(2, 44, 34, 0.6);
@@ -130,21 +130,15 @@
             transition: all 0.3s ease;
         }
 
-        input[type="file"] {
-            padding: 9px;
-            cursor: pointer;
-            color: #cbd5e1;
+        input:focus, textarea:focus {
+            border-color: #34d399;
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.6);
+            background: rgba(2, 44, 34, 0.9);
         }
 
         textarea {
             resize: none;
             height: 80px;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #34d399;
-            box-shadow: 0 0 15px rgba(52, 211, 153, 0.6);
-            background: rgba(2, 44, 34, 0.9);
         }
 
         .btn-magic {
@@ -168,10 +162,6 @@
             box-shadow: 0 8px 25px rgba(255, 215, 0, 0.8);
         }
 
-        .btn-magic:active {
-            transform: scale(0.98);
-        }
-
         .btn-gallery {
             display: block;
             margin-top: 20px;
@@ -189,25 +179,6 @@
         .btn-gallery:hover {
             background: rgba(52, 211, 153, 0.2);
             border-color: #34d399;
-        }
-
-        .btn-video {
-            display: block;
-            margin-top: 10px;
-            background: rgba(212, 175, 55, 0.1);
-            color: #ffd700;
-            font-family: 'Cinzel', serif;
-            font-size: 0.95rem;
-            text-decoration: none;
-            padding: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            border-radius: 10px;
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .btn-video:hover {
-            background: rgba(212, 175, 55, 0.2);
-            border-color: #ffd700;
         }
 
         #statusMessage {
@@ -233,14 +204,14 @@
 
     <div class="container">
         <div class="header-top" id="headerTop">
-            <h1>Bosque Encantado</h1>
-            <div class="subtitle">MIS 15 AÑOS DE ROSSIBEL</div>
+            <h1>Saludos Mágicos</h1>
+            <div class="subtitle">VIDEOS DE FAMILIARES DESDE EL EXTERIOR</div>
         </div>
 
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const header = document.getElementById('headerTop');
-                const particleCount = 18;
+                const particleCount = 15;
                 for (let i = 0; i < particleCount; i++) {
                     const particle = document.createElement('div');
                     particle.className = 'magic-particle';
@@ -255,34 +226,33 @@
             });
         </script>
 
-        <p class="intro-text">Comparte tus mejores momentos de la celebración. Sube tu foto con un mensaje para que forme parte de esta noche mágica.</p>
+        <p class="intro-text">Abuela, tíos y familia: dejen su saludo en video (subido a Google Drive, YouTube o enlace directo) para que Rossibel lo vea en la gran pantalla.</p>
 
-        <form id="uploadForm">
+        <form id="videoForm">
             <div class="form-group">
-                <label>Tu Nombre o Familia:</label>
-                <input type="text" id="senderName" required placeholder="Ej. Familia Torres">
+                <label>Nombre del Familiar / Parentesco:</label>
+                <input type="text" id="senderName" required placeholder="Ej. Tía María desde España">
             </div>
             <div class="form-group">
-                <label>Tu Mensaje para Rossibel:</label>
-                <textarea id="message" required placeholder="Escribe un deseo especial..."></textarea>
+                <label>Enlace del Video (YouTube, Drive, etc.):</label>
+                <input type="url" id="videoUrl" required placeholder="https://...">
             </div>
             <div class="form-group">
-                <label>Selecciona tu Foto:</label>
-                <input type="file" id="photoFile" accept="image/*" required>
+                <label>Mensaje Corto para Rossibel:</label>
+                <textarea id="message" required placeholder="¡Felices 15 años, te amamos desde lejos!"></textarea>
             </div>
-            <button type="submit" class="btn-magic" id="submitBtn">✨ Subir Mi Momento Mágico</button>
+            <button type="submit" class="btn-magic" id="submitBtn">✨ Enviar Saludo</button>
         </form>
 
         <div id="successBox" class="success-box">
-            <h3>¡Foto enviada con éxito! ✨</h3>
-            <p>Tu recuerdo ha sido enviado a moderación. ¡Pronto brillará en la gran pantalla!</p>
-            <button type="button" id="resetBtn" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:10px; font-weight:bold; font-size:1rem;">Subir otra foto</button>
+            <h3>¡Saludo enviado con éxito! ✨</h3>
+            <p>El video ha sido enviado a moderación para la gran pantalla.</p>
+            <button type="button" id="resetBtn" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:10px; font-weight:bold; font-size:1rem;">Enviar otro saludo</button>
         </div>
 
         <div id="statusMessage"></div>
 
-        <a href="galeria.html" class="btn-gallery">🌿 Visitar Galería en Vivo</a>
-        <a href="subir-video.html" class="btn-video">🎥 Enviar Saludo en Video (Familia Exterior)</a>
+        <a href="index.html" class="btn-gallery">🌿 Volver al Inicio</a>
     </div>
 
     <script type="module">
@@ -301,87 +271,48 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const uploadForm = document.getElementById('uploadForm');
+        const videoForm = document.getElementById('videoForm');
         const submitBtn = document.getElementById('submitBtn');
         const statusMessage = document.getElementById('statusMessage');
         const successBox = document.getElementById('successBox');
         const resetBtn = document.getElementById('resetBtn');
 
-        uploadForm.addEventListener('submit', async (e) => {
+        videoForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const senderName = document.getElementById('senderName').value;
+            const videoUrl = document.getElementById('videoUrl').value;
             const message = document.getElementById('message').value;
-            const fileInput = document.getElementById('photoFile');
-            const file = fileInput.files[0];
-
-            if (!file) return;
 
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Procesando... 🌟';
-            statusMessage.textContent = 'Optimizando foto para el Bosque Encantado...';
+            submitBtn.textContent = 'Enviando... 🚀';
+            statusMessage.textContent = 'Registrando saludo en el Bosque Encantado...';
 
             try {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = async () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 1000;
-                        const MAX_HEIGHT = 1000;
-                        let width = img.width;
-                        let height = img.height;
+                await addDoc(collection(db, "videos"), {
+                    senderName: senderName,
+                    videoUrl: videoUrl,
+                    message: message,
+                    status: "pending",
+                    createdAt: new Date()
+                });
 
-                        if (width > height) {
-                            if (width > MAX_WIDTH) {
-                                height *= MAX_WIDTH / width;
-                                width = MAX_WIDTH;
-                            }
-                        } else {
-                            if (height > MAX_HEIGHT) {
-                                width *= MAX_HEIGHT / height;
-                                height = MAX_HEIGHT;
-                            }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
-
-                        submitBtn.textContent = 'Subiendo... 🚀';
-                        statusMessage.textContent = 'Enviando a moderación...';
-
-                        await addDoc(collection(db, "fotos"), {
-                            senderName: senderName,
-                            message: message,
-                            imageUrl: compressedBase64,
-                            status: "pending",
-                            createdAt: new Date()
-                        });
-
-                        uploadForm.style.display = 'none';
-                        successBox.style.display = 'block';
-                        statusMessage.textContent = '';
-                    };
-                };
+                videoForm.style.display = 'none';
+                successBox.style.display = 'block';
+                statusMessage.textContent = '';
             } catch (error) {
-                console.error("Error al subir:", error);
-                statusMessage.textContent = 'Hubo un error al subir la foto. Intenta de nuevo.';
+                console.error("Error al enviar video:", error);
+                statusMessage.textContent = 'Hubo un error al enviar el saludo. Intenta de nuevo.';
                 submitBtn.disabled = false;
-                submitBtn.textContent = '✨ Subir Mi Momento Mágico';
+                submitBtn.textContent = '✨ Enviar Saludo';
             }
         });
 
         resetBtn.addEventListener('click', () => {
-            uploadForm.reset();
-            uploadForm.style.display = 'block';
+            videoForm.reset();
+            videoForm.style.display = 'block';
             successBox.style.display = 'none';
             submitBtn.disabled = false;
-            submitBtn.textContent = '✨ Subir Mi Momento Mágico';
+            submitBtn.textContent = '✨ Enviar Saludo';
             statusMessage.textContent = '';
         });
     </script>
