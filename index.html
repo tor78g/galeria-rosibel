@@ -22,47 +22,57 @@
             position: relative;
         }
 
-        /* PARTÍCULAS QUE FLOTAN EN TODA LA PANTALLA INCLUYENDO EL INTERIOR */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 20px;
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(110, 231, 183, 0.2);
+            padding: 30px 25px;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ENCABEZADO SUPERIOR CON CONTENCIÓN DE LUCIÉRNAGAS */
+        .header-top {
+            position: relative;
+            overflow: hidden;
+            padding: 15px 10px 10px 10px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: rgba(2, 44, 34, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* LUCIÉRNAGAS CONFINADAS SOLO EN LA PARTE SUPERIOR */
         .magic-particle {
-            position: fixed;
+            position: absolute;
             background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(52,211,153,0.8) 50%, transparent 100%);
             border-radius: 50%;
             pointer-events: none;
             animation: floatParticle linear infinite;
-            box-shadow: 0 0 12px rgba(255,215,0,0.9), 0 0 20px rgba(52,211,153,0.6);
-            z-index: 99; /* Por encima de todo para cruzar el cuadro */
+            box-shadow: 0 0 10px rgba(255,215,0,0.9), 0 0 18px rgba(52,211,153,0.6);
+            z-index: 1;
         }
 
         @keyframes floatParticle {
             0% {
-                transform: translateY(105vh) translateX(0) scale(0.6);
+                transform: translateY(90px) translateX(0) scale(0.6);
                 opacity: 0;
             }
-            15% {
+            20% {
                 opacity: 0.9;
             }
-            85% {
+            80% {
                 opacity: 0.9;
             }
             100% {
-                transform: translateY(-10vh) translateX(60px) scale(1.6);
+                transform: translateY(-20px) translateX(30px) scale(1.4);
                 opacity: 0;
             }
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(15, 23, 42, 0.78); /* Ligeramente más translúcido para ver las luces cruzar */
-            border-radius: 20px;
-            border: 2px solid rgba(212, 175, 55, 0.6);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(52, 211, 153, 0.2);
-            padding: 30px 25px;
-            box-sizing: border-box;
-            text-align: center;
-            backdrop-filter: blur(8px);
-            position: relative;
-            z-index: 10;
         }
 
         h1 {
@@ -72,6 +82,8 @@
             margin: 0 0 5px 0;
             letter-spacing: 2px;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            position: relative;
+            z-index: 2;
         }
 
         .subtitle {
@@ -80,8 +92,10 @@
             letter-spacing: 4px;
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
-            margin-bottom: 20px;
-            text-shadow: 0 0 12px rgba(52, 211, 153, 0.7);
+            margin: 0;
+            text-shadow: 0 0 10px rgba(52, 211, 153, 0.7);
+            position: relative;
+            z-index: 2;
         }
 
         .intro-text {
@@ -200,27 +214,31 @@
 </head>
 <body>
 
-    <!-- SCRIPT DE LUCIÉRNAGAS DISTRIBUIDAS POR TODA LA PANTALLA -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const particleCount = 35;
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'magic-particle';
-                const size = Math.random() * 10 + 8; // Tamaños variados
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.animationDuration = `${Math.random() * 4 + 3}s`;
-                particle.style.animationDelay = `${Math.random() * 4}s`;
-                document.body.appendChild(particle);
-            }
-        });
-    </script>
-
     <div class="container">
-        <h1>Bosque Encantado</h1>
-        <div class="subtitle">MIS 15 AÑOS DE ROSSIBEL</div>
+        <!-- ZONA SUPERIOR CON LUCIÉRNAGAS -->
+        <div class="header-top" id="headerTop">
+            <h1>Bosque Encantado</h1>
+            <div class="subtitle">MIS 15 AÑOS DE ROSSIBEL</div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const header = document.getElementById('headerTop');
+                const particleCount = 18;
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'magic-particle';
+                    const size = Math.random() * 7 + 5;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.animationDuration = `${Math.random() * 3 + 2.5}s`;
+                    particle.style.animationDelay = `${Math.random() * 3}s`;
+                    header.appendChild(particle);
+                }
+            });
+        </script>
+
         <p class="intro-text">Comparte tus mejores momentos de la celebración. Sube tu foto con un mensaje para que forme parte de esta noche mágica.</p>
 
         <form id="uploadForm">
