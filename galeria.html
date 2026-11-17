@@ -18,7 +18,7 @@
             overflow-x: hidden;
         }
 
-        /* LUCIÉRNAGAS FLOTANTES EN LA GALERÍA */
+        /* LUCIÉRNAGAS FLOTANDO POR ENCIMA DE TODO (INCLUYENDO TÍTULOS Y ENCABEZADO) */
         .magic-particle {
             position: fixed;
             background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(52,211,153,0.8) 50%, transparent 100%);
@@ -26,7 +26,7 @@
             pointer-events: none;
             animation: floatParticle linear infinite;
             box-shadow: 0 0 12px rgba(255,215,0,0.9), 0 0 20px rgba(52,211,153,0.6);
-            z-index: 1;
+            z-index: 999; /* Por encima del texto y el encabezado */
         }
 
         @keyframes floatParticle {
@@ -91,6 +91,7 @@
             align-items: center;
             gap: 6px;
             transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 11;
         }
 
         .btn-subir-flotante:hover {
@@ -108,7 +109,6 @@
             z-index: 10;
         }
 
-        /* TARJETAS MÁS VISTOSAS Y ELEGANTES */
         .card {
             background: rgba(15, 23, 42, 0.85);
             border-radius: 16px;
@@ -165,7 +165,6 @@
             line-height: 1.3;
         }
 
-        /* MODAL DE FOTO AMPLIADA */
         #modalViewer {
             display: none;
             position: fixed;
@@ -279,10 +278,10 @@
 </head>
 <body>
 
-    <!-- GENERADOR DE LUCIÉRNAGAS EN LA GALERÍA -->
+    <!-- GENERADOR DE LUCIÉRNAGAS SOBRE TODA LA PANTALLA -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const particleCount = 30;
+            const particleCount = 35;
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'magic-particle';
