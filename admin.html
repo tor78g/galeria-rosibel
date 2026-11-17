@@ -3,208 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Protegido - 15 Años Rossibel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>Panel de Administración - 15 Años Rossibel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #0f172a;
+            background: radial-gradient(circle at center, #064e3b 0%, #022c22 50%, #000000 100%);
             color: #fff;
             margin: 0;
-            padding: 20px;
-        }
-        #auth-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0f172a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .auth-card {
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 16px;
-            border: 2px solid #d4af37;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            text-align: center;
+            padding: 25px 15px;
+            min-height: 100vh;
             box-sizing: border-box;
         }
-        .auth-card h2 {
-            font-family: 'Cinzel', serif;
-            color: #d4af37;
-            margin-top: 0;
-        }
-        .auth-input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0 20px 0;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: #fff;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
+
+        .header-banner {
             text-align: center;
-        }
-        .auth-btn {
-            background: #d4af37;
-            color: #000;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .auth-btn:hover { background: #b89728; }
-        #auth-error {
-            color: #ef4444;
-            font-size: 0.85rem;
-            margin-top: 10px;
-            display: none;
-        }
-        #main-panel { display: none; }
-        
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto 30px auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            border-bottom: 2px solid #1e293b;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.4);
             padding-bottom: 15px;
         }
-        .header-titles h1 {
-            font-family: 'Cinzel', serif;
-            color: #d4af37;
-            margin: 0 0 5px 0;
-            font-size: 1.8rem;
-        }
-        .subtitle {
-            color: #94a3b8;
-            margin: 0;
-            font-size: 0.95rem;
-        }
-        .btn-logout {
-            background: #475569;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-        .btn-logout:hover { background: #334155; }
 
-        .section-title {
-            max-width: 1200px;
-            margin: 30px auto 20px auto;
-            color: #38bdf8;
-            font-size: 1.3rem;
-            border-bottom: 1px solid #1e293b;
-            padding-bottom: 8px;
+        h1 {
             font-family: 'Cinzel', serif;
+            color: #ffd700;
+            font-size: 2.2rem;
+            margin: 0 0 5px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
         }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
+
+        .subtitle {
+            color: #34d399;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+        }
+
+        /* PESTAÑAS DE NAVEGACIÓN ADMIN */
+        .admin-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            background: rgba(15, 23, 42, 0.8);
+            color: #cbd5e1;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 0.95rem;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            color: #000;
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .section-container {
+            display: none;
+            max-width: 1400px;
             margin: 0 auto;
         }
-        .card {
-            background: #1e293b;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #334155;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+
+        .section-container.active {
+            display: block;
         }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
         .card img {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
         }
-        .card-body { padding: 15px; }
+
+        .card-body {
+            padding: 15px;
+            flex-grow: 1;
+        }
+
         .card-body h3 {
             margin: 0 0 5px 0;
-            color: #d4af37;
+            color: #ffd700;
             font-size: 1.1rem;
+            font-family: 'Cinzel', serif;
         }
+
         .card-body p {
-            margin: 0 0 15px 0;
-            color: #cbd5e1;
+            margin: 0 0 10px 0;
+            color: #e2e8f0;
             font-size: 0.9rem;
+            font-style: italic;
         }
-        .actions { display: flex; gap: 10px; }
-        button {
-            flex: 1;
-            padding: 10px;
+
+        .video-link-box {
+            background: rgba(2, 44, 34, 0.6);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+
+        .video-link-box a {
+            color: #34d399;
+            font-size: 0.85rem;
+            text-decoration: underline;
+        }
+
+        .card-actions {
+            padding: 12px 15px;
+            background: rgba(2, 44, 34, 0.4);
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-approve {
+            background: #34d399;
+            color: #000;
             border: none;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: bold;
+            flex: 1;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-family: 'Cinzel', serif;
+            transition: background 0.2s;
         }
-        .btn-approve { background: #059669; color: white; }
-        .btn-approve:hover { background: #047857; }
-        .btn-reject { background: #dc2626; color: white; }
-        .btn-reject:hover { background: #b91c1c; }
-        .btn-revoke { background: #d97706; color: white; }
-        .btn-revoke:hover { background: #b45309; }
+
+        .btn-approve:hover {
+            background: #059669;
+            color: #fff;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            flex: 1;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            transition: background 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            color: #94a3b8;
-            padding: 30px;
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 8px;
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            padding: 50px 20px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 16px;
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+            font-family: 'Cinzel', serif;
         }
     </style>
 </head>
 <body>
 
-    <!-- CAPA DE SEGURIDAD (USUARIO Y PIN) -->
-    <div id="auth-overlay">
-        <div class="auth-card">
-            <h2>Acceso Restringido</h2>
-            <p style="color: #94a3b8; font-size: 0.9rem;">15 Años Rossibel</p>
-            <input type="text" id="usernameInput" class="auth-input" placeholder="Nombre de Usuario">
-            <input type="password" id="pinInput" class="auth-input" placeholder="PIN Secreto">
-            <button class="auth-btn" id="loginBtn">Ingresar al Panel</button>
-            <div id="auth-error">Usuario o PIN incorrecto.</div>
+    <div class="header-banner">
+        <h1>Panel de Control</h1>
+        <div class="subtitle">MODERACIÓN DE CONTENIDO • BOSQUE ENCANTADO</div>
+    </div>
+
+    <!-- BOTONES DE PESTAÑAS -->
+    <div class="admin-tabs">
+        <button class="tab-btn active" id="tabFotosBtn">📸 Moderar Fotos (<span id="countFotos">0</span>)</button>
+        <button class="tab-btn" id="tabVideosBtn">🎥 Moderar Videos (<span id="countVideos">0</span>)</button>
+    </div>
+
+    <!-- SECCIÓN DE FOTOS PENDIENTES -->
+    <div class="section-container active" id="sectionFotos">
+        <div class="grid" id="adminGridFotos">
+            <div class="empty-state">No hay fotos pendientes de aprobación. ✨</div>
         </div>
     </div>
 
-    <!-- PANEL DE CONTROL PRINCIPAL -->
-    <div id="main-panel">
-        <div class="header-container">
-            <div class="header-titles">
-                <h1>Panel de Control Profesional</h1>
-                <div class="subtitle">Moderación en tiempo real • 15 Años Rossibel</div>
-            </div>
-            <button class="btn-logout" id="logoutBtn">Cerrar Sesión</button>
-        </div>
-        
-        <div class="section-title">📸 Fotos Pendientes de Revisión</div>
-        <div class="grid" id="pendingGrid">
-            <div class="empty-state">Cargando fotos pendientes...</div>
-        </div>
-
-        <div class="section-title">✨ Fotos Activas en Pantalla (Aprobadas)</div>
-        <div class="grid" id="approvedGrid">
-            <div class="empty-state">No hay fotos proyectándose actualmente.</div>
+    <!-- SECCIÓN DE VIDEOS PENDIENTES -->
+    <div class="section-container" id="sectionVideos">
+        <div class="grid" id="adminGridVideos">
+            <div class="empty-state">No hay saludos en video pendientes de aprobación. 🎥</div>
         </div>
     </div>
 
@@ -212,144 +222,129 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const ADMIN_USER = "Rafael";
-        const ADMIN_PIN = "1947";
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTjyrFGjq5zr5hqnMT3qZX4sNuWZT3AJQ",
+            authDomain: "rosibel15.firebaseapp.com",
+            projectId: "rosibel15",
+            storageBucket: "rosibel15.firebasestorage.app",
+            messagingSenderId: "1042848632443",
+            appId: "1:1042848632443:web:7b9ebf2da8bb21dd56dcde"
+        };
 
-        const authOverlay = document.getElementById('auth-overlay');
-        const mainPanel = document.getElementById('main-panel');
-        const loginBtn = document.getElementById('loginBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const usernameInput = document.getElementById('usernameInput');
-        const pinInput = document.getElementById('pinInput');
-        const authError = document.getElementById('auth-error');
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        if (sessionStorage.getItem('auth_ok') === 'true') {
-            authOverlay.style.display = 'none';
-            mainPanel.style.display = 'block';
-            iniciarSistemaFirebase();
-        }
+        // Control de Pestañas
+        const tabFotosBtn = document.getElementById('tabFotosBtn');
+        const tabVideosBtn = document.getElementById('tabVideosBtn');
+        const sectionFotos = document.getElementById('sectionFotos');
+        const sectionVideos = document.getElementById('sectionVideos');
 
-        loginBtn.addEventListener('click', () => {
-            const userVal = usernameInput.value.trim();
-            const pinVal = pinInput.value.trim();
+        tabFotosBtn.addEventListener('click', () => {
+            tabFotosBtn.classList.add('active');
+            tabVideosBtn.classList.remove('active');
+            sectionFotos.classList.add('active');
+            sectionVideos.classList.remove('active');
+        });
 
-            if (userVal === ADMIN_USER && pinVal === ADMIN_PIN) {
-                sessionStorage.setItem('auth_ok', 'true');
-                authOverlay.style.display = 'none';
-                mainPanel.style.display = 'block';
-                usernameInput.value = '';
-                pinInput.value = '';
-                authError.style.display = 'none';
-                iniciarSistemaFirebase();
-            } else {
-                authError.style.display = 'block';
-                pinInput.value = '';
+        tabVideosBtn.addEventListener('click', () => {
+            tabVideosBtn.classList.add('active');
+            tabFotosBtn.classList.remove('active');
+            sectionVideos.classList.add('active');
+            sectionFotos.classList.remove('active');
+        });
+
+        const adminGridFotos = document.getElementById('adminGridFotos');
+        const adminGridVideos = document.getElementById('adminGridVideos');
+        const countFotos = document.getElementById('countFotos');
+        const countVideos = document.getElementById('countVideos');
+
+        // Escuchar Fotos Pendientes
+        onSnapshot(query(collection(db, "fotos"), where("status", "==", "pending")), (snapshot) => {
+            adminGridFotos.innerHTML = '';
+            countFotos.textContent = snapshot.size;
+
+            if (snapshot.empty) {
+                adminGridFotos.innerHTML = '<div class="empty-state">No hay fotos pendientes de aprobación. ✨</div>';
+                return;
             }
-        });
 
-        // Botón de Cerrar Sesión
-        logoutBtn.addEventListener('click', () => {
-            sessionStorage.removeItem('auth_ok');
-            mainPanel.style.display = 'none';
-            authOverlay.style.display = 'flex';
-        });
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${data.imageUrl}" alt="Foto pendiente">
+                    <div class="card-body">
+                        <h3>${escapeHtml(data.senderName)}</h3>
+                        <p>"${escapeHtml(data.message)}"</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-approve" data-id="${docSnap.id}">Aprobar ✨</button>
+                        <button class="btn-delete" data-id="${docSnap.id}">Rechazar 🗑️</button>
+                    </div>
+                `;
 
-        function iniciarSistemaFirebase() {
-            const firebaseConfig = {
-                apiKey: "AIzaSyCTjyrFGjq5zr5hqnMT3qZX4sNuWZT3AJQ",
-                authDomain: "rosibel15.firebaseapp.com",
-                projectId: "rosibel15",
-                storageBucket: "rosibel15.firebasestorage.app",
-                messagingSenderId: "1042848632443",
-                appId: "1:1042848632443:web:7b9ebf2da8bb21dd56dcde"
-            };
-
-            const app = initializeApp(firebaseConfig);
-            const db = getFirestore(app);
-
-            const pendingGrid = document.getElementById('pendingGrid');
-            const approvedGrid = document.getElementById('approvedGrid');
-
-            const qPending = query(collection(db, "fotos"), where("status", "==", "pending"));
-            onSnapshot(qPending, (snapshot) => {
-                pendingGrid.innerHTML = '';
-                if (snapshot.empty) {
-                    pendingGrid.innerHTML = '<div class="empty-state">No hay fotos pendientes de revisión.</div>';
-                    return;
-                }
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const id = docSnap.id;
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <img src="${data.imageUrl}" alt="Foto pendiente">
-                        <div class="card-body">
-                            <h3>${escapeHtml(data.senderName)}</h3>
-                            <p>"${escapeHtml(data.message)}"</p>
-                            <div class="actions">
-                                <button class="btn-approve" onclick="updateStatus('${id}', 'approved')">Aprobar</button>
-                                <button class="btn-reject" onclick="deletePhoto('${id}')">Rechazar</button>
-                            </div>
-                        </div>
-                    `;
-                    pendingGrid.appendChild(card);
+                card.querySelector('.btn-approve').addEventListener('click', async () => {
+                    await updateDoc(doc(db, "fotos", docSnap.id), { status: "approved" });
                 });
-            });
 
-            const qApproved = query(collection(db, "fotos"), where("status", "==", "approved"));
-            onSnapshot(qApproved, (snapshot) => {
-                approvedGrid.innerHTML = '';
-                if (snapshot.empty) {
-                    approvedGrid.innerHTML = '<div class="empty-state">No hay fotos proyectándose actualmente.</div>';
-                    return;
-                }
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const id = docSnap.id;
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <img src="${data.imageUrl}" alt="Foto aprobada">
-                        <div class="card-body">
-                            <h3>${escapeHtml(data.senderName)}</h3>
-                            <p>"${escapeHtml(data.message)}"</p>
-                            <div class="actions">
-                                <button class="btn-revoke" onclick="updateStatus('${id}', 'pending')">Retirar de Pantalla</button>
-                                <button class="btn-reject" onclick="deletePhoto('${id}')">Eliminar</button>
-                            </div>
-                        </div>
-                    `;
-                    approvedGrid.appendChild(card);
-                });
-            });
-
-            window.updateStatus = async (id, newStatus) => {
-                try {
-                    const docRef = doc(db, "fotos", id);
-                    await updateDoc(docRef, { status: newStatus });
-                } catch (error) {
-                    console.error("Error al actualizar estado:", error);
-                    alert("No se pudo actualizar el estado de la foto.");
-                }
-            };
-
-            window.deletePhoto = async (id) => {
-                if (confirm("¿Estás seguro de eliminar permanentemente esta foto?")) {
-                    try {
-                        const docRef = doc(db, "fotos", id);
-                        await deleteDoc(docRef);
-                    } catch (error) {
-                        console.error("Error al eliminar:", error);
-                        alert("No se pudo eliminar la foto.");
+                card.querySelector('.btn-delete').addEventListener('click', async () => {
+                    if (confirm("¿Estás seguro de rechazar y eliminar esta foto?")) {
+                        await deleteDoc(doc(db, "fotos", docSnap.id));
                     }
-                }
-            };
+                });
 
-            function escapeHtml(text) {
-                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-                return text.replace(/[&<>"']/g, m => map[m]);
+                adminGridFotos.appendChild(card);
+            });
+        });
+
+        // Escuchar Videos Pendientes
+        onSnapshot(query(collection(db, "videos"), where("status", "==", "pending")), (snapshot) => {
+            adminGridVideos.innerHTML = '';
+            countVideos.textContent = snapshot.size;
+
+            if (snapshot.empty) {
+                adminGridVideos.innerHTML = '<div class="empty-state">No hay saludos en video pendientes de aprobación. 🎥</div>';
+                return;
             }
+
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-body" style="padding-top:20px;">
+                        <h3>${escapeHtml(data.senderName)}</h3>
+                        <p>"${escapeHtml(data.message)}"</p>
+                        <div class="video-link-box">
+                            <strong>Enlace:</strong><br>
+                            <a href="${data.videoUrl}" target="_blank">${data.videoUrl}</a>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-approve" data-id="${docSnap.id}">Aprobar 🎥</button>
+                        <button class="btn-delete" data-id="${docSnap.id}">Rechazar 🗑️</button>
+                    </div>
+                `;
+
+                card.querySelector('.btn-approve').addEventListener('click', async () => {
+                    await updateDoc(doc(db, "videos", docSnap.id), { status: "approved" });
+                });
+
+                card.querySelector('.btn-delete').addEventListener('click', async () => {
+                    if (confirm("¿Estás seguro de rechazar y eliminar este video?")) {
+                        await deleteDoc(doc(db, "videos", docSnap.id));
+                    }
+                });
+
+                adminGridVideos.appendChild(card);
+            });
+        });
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
         }
     </script>
 </body>
