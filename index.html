@@ -1,176 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bosque Encantado - 15 Años Rossibel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at center, #064e3b 0%, #022c22 60%, #000000 100%);
-            color: #fff;
-            margin: 0;
-            padding: 20px 15px;
-            min-height: 100vh;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(15, 23, 42, 0.9);
-            border-radius: 16px;
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            padding: 25px;
-            box-sizing: border-box;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        h1 {
-            font-family: 'Cinzel', serif;
-            color: #d4af37;
-            font-size: 2.2rem;
-            margin: 0 0 5px 0;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
-        .subtitle {
-            color: #6ee7b7;
-            font-size: 0.9rem;
-            letter-spacing: 3px;
-            font-family: 'Cinzel', serif;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-        .intro-text {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        label {
-            display: block;
-            color: #d4af37;
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            margin-bottom: 5px;
-        }
-        input[type="text"], textarea, input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            background: rgba(2, 44, 34, 0.6);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            box-sizing: border-box;
-            outline: none;
-        }
-        input[type="file"] {
-            padding: 8px;
-            cursor: pointer;
-        }
-        textarea {
-            resize: none;
-            height: 80px;
-        }
-        input:focus, textarea:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
-        .btn-magic {
-            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
-            color: #000;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            font-size: 1.1rem;
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
-        }
-        .btn-magic:active {
-            transform: scale(0.98);
-        }
-        .btn-gallery {
-            display: block;
-            margin-top: 20px;
-            background: transparent;
-            color: #6ee7b7;
-            font-family: 'Cinzel', serif;
-            font-size: 0.95rem;
-            text-decoration: none;
-            padding: 10px;
-            border: 1px dashed rgba(110, 231, 183, 0.4);
-            border-radius: 8px;
-            transition: background 0.2s;
-        }
-        .btn-gallery:hover {
-            background: rgba(110, 231, 183, 0.1);
-        }
-        #statusMessage {
-            margin-top: 15px;
-            font-size: 0.95rem;
-            font-style: italic;
-        }
-        .success-box {
-            display: none;
-            background: rgba(6, 78, 59, 0.8);
-            border: 1px solid #6ee7b7;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            color: #d1fae5;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Bosque Encantado</h1>
-        <div class="subtitle">MIS 15 AÑOS DE ROSSIBEL</div>
-        <p class="intro-text">Comparte tus mejores momentos de la celebración. Sube tu foto con un mensaje para que forme parte de esta noche mágica.</p>
-
-        <form id="uploadForm">
-            <div class="form-group">
-                <label>Tu Nombre o Familia:</label>
-                <input type="text" id="senderName" required placeholder="Ej. Familia Torres">
-            </div>
-            <div class="form-group">
-                <label>Tu Mensaje para Rossibel:</label>
-                <textarea id="message" required placeholder="Escribe un deseo especial..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Selecciona tu Foto:</label>
-                <input type="file" id="photoFile" accept="image/*" required>
-            </div>
-            <button type="submit" class="btn-magic" id="submitBtn">✨ Subir Mi Momento Mágico</button>
-        </form>
-
-        <div id="successBox" class="success-box">
-            <h3>¡Foto enviada con éxito! ✨</h3>
-            <p>Tu recuerdo ha sido compartido. ¡Sigue subiendo más momentos importantes de la noche!</p>
-            <button onclick="resetForm()" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:8px;">Subir otra foto</button>
-        </div>
-
-        <div id="statusMessage"></div>
-
-        <a href="galeria.html" class="btn-gallery">🌿 Visitar Galería en Vivo</a>
-    </div>
-
-    <script type="module">
+<script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -201,30 +29,62 @@
             if (!file) return;
 
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Subiendo al Bosque Encantado... 🌟';
-            statusMessage.textContent = 'Procesando imagen, por favor espera...';
+            submitBtn.textContent = 'Preparando imagen... 🌟';
+            statusMessage.textContent = 'Optimizando foto para el Bosque Encantado...';
 
             try {
+                // Redimensionar y comprimir la imagen para evitar que pese demasiado
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = async () => {
-                    const base64Image = reader.result;
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = async () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 1000;
+                        const MAX_HEIGHT = 1000;
+                        let width = img.width;
+                        let height = img.height;
 
-                    await addDoc(collection(db, "fotos"), {
-                        senderName: senderName,
-                        message: message,
-                        imageUrl: base64Image,
-                        status: "approved",
-                        createdAt: new Date()
-                    });
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
 
-                    uploadForm.style.display = 'none';
-                    successBox.style.display = 'block';
-                    statusMessage.textContent = '';
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Convertir a formato comprimido JPEG al 80% de calidad
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+
+                        submitBtn.textContent = 'Subiendo al servidor... 🚀';
+                        statusMessage.textContent = 'Guardando en la base de datos...';
+
+                        await addDoc(collection(db, "fotos"), {
+                            senderName: senderName,
+                            message: message,
+                            imageUrl: compressedBase64,
+                            status: "approved",
+                            createdAt: new Date()
+                        });
+
+                        uploadForm.style.display = 'none';
+                        successBox.style.display = 'block';
+                        statusMessage.textContent = '';
+                    };
                 };
             } catch (error) {
                 console.error("Error al subir:", error);
-                statusMessage.textContent = 'Hubo un error al subir la foto. Intenta de nuevo.';
+                statusMessage.textContent = 'Hubo un error al subir la foto. Intenta con otra imagen.';
                 submitBtn.disabled = false;
                 submitBtn.textContent = '✨ Subir Mi Momento Mágico';
             }
@@ -236,7 +96,6 @@
             successBox.style.display = 'none';
             submitBtn.disabled = false;
             submitBtn.textContent = '✨ Subir Mi Momento Mágico';
+            statusMessage.textContent = '';
         }
     </script>
-</body>
-</html>
