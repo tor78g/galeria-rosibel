@@ -24,12 +24,11 @@
             border-bottom: 2px solid rgba(212, 175, 55, 0.4);
             padding: 30px 15px 25px 15px;
             position: relative;
-            overflow: hidden; /* Mantiene las luciérnagas confinadas en la parte superior */
+            overflow: hidden;
             border-radius: 0 0 16px 16px;
             background: rgba(2, 44, 34, 0.3);
         }
 
-        /* LUCIÉRNAGAS CONFINADAS Y FLOTANDO SOLO EN EL ENCABEZADO */
         .magic-particle {
             position: absolute;
             background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(52,211,153,0.8) 50%, transparent 100%);
@@ -79,7 +78,6 @@
             z-index: 2;
         }
 
-        /* BOTÓN FLOTANTE ESTILIZADO */
         .btn-subir-flotante {
             position: absolute;
             top: 20px;
@@ -171,6 +169,7 @@
             line-height: 1.3;
         }
 
+        /* MODAL CON NAVEGACIÓN TIPO CARRUSEL */
         #modalViewer {
             display: none;
             position: fixed;
@@ -178,7 +177,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.92);
+            background: rgba(0, 0, 0, 0.95);
             z-index: 9999;
             justify-content: center;
             align-items: center;
@@ -188,14 +187,53 @@
             backdrop-filter: blur(10px);
         }
 
-        #modalViewer img {
+        .modal-content-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             max-width: 90%;
+            max-height: 70vh;
+        }
+
+        #modalViewer img {
+            max-width: 100%;
             max-height: 65vh;
             border-radius: 12px;
             border: 2px solid #ffd700;
             box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);
             object-fit: contain;
         }
+
+        /* BOTONES DE NAVEGAR A LOS LADOS */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(212, 175, 55, 0.8);
+            color: #000;
+            border: none;
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #ffd700;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        #prevBtn { left: -70px; }
+        #nextBtn { right: -70px; }
 
         .modal-info {
             text-align: center;
@@ -239,6 +277,7 @@
             align-items: center;
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
             transition: transform 0.2s;
+            z-index: 10001;
         }
 
         .close-btn:hover {
@@ -284,6 +323,9 @@
             .card-body p {
                 font-size: 0.8rem;
             }
+            /* Botones de navegación adaptados a móviles debajo o a los lados internos */
+            #prevBtn { left: 10px; width: 40px; height: 40px; font-size: 1.5rem; }
+            #nextBtn { right: 10px; width: 40px; height: 40px; font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -295,7 +337,6 @@
         <div class="subtitle">MIS 15 AÑOS ROSSIBEL • GALERÍA EN VIVO</div>
     </div>
 
-    <!-- SCRIPT DE LUCIÉRNAGAS DENTRO DEL ENCABEZADO -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const banner = document.getElementById('bannerHeader');
@@ -320,7 +361,11 @@
 
     <div id="modalViewer">
         <button class="close-btn" id="closeModal">&times;</button>
-        <img id="modalImg" src="" alt="Foto ampliada">
+        <button class="nav-btn" id="prevBtn">&#10094;</button>
+        <div class="modal-content-wrapper">
+            <img id="modalImg" src="" alt="Foto ampliada">
+        </div>
+        <button class="nav-btn" id="nextBtn">&#10095;</button>
         <div class="modal-info">
             <h2 id="modalSender"></h2>
             <p id="modalMsg"></p>
@@ -349,17 +394,34 @@
         const modalSender = document.getElementById('modalSender');
         const modalMsg = document.getElementById('modalMsg');
         const closeModal = document.getElementById('closeModal');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
 
-        const q = query(collection(db, "fotos"), where("status", "==", "approved"));
+        let allPhotos = [];
+        let currentIndex = 0;
 
-        onSnapshot(q, (snapshot) => {
+        function updateModalContent() {
+            if (allPhotos.length === 0) return;
+            const photo = allPhotos[currentIndex];
+            modalImg.src = photo.imageUrl;
+            modalSender.textContent = photo.senderName;
+            modalMsg.textContent = `"${photo.message}"`;
+        }
+
+        onSnapshot(query(collection(db, "fotos"), where("status", "==", "approved")), (snapshot) => {
             liveGrid.innerHTML = '';
+            allPhotos = [];
+
             if (snapshot.empty) {
                 liveGrid.innerHTML = '<div class="empty-state">Esperando las primeras fotos mágicas del evento... ✨</div>';
                 return;
             }
+
             snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
+                allPhotos.push(docSnap.data());
+            });
+
+            allPhotos.forEach((data, index) => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
@@ -370,9 +432,8 @@
                     </div>
                 `;
                 card.addEventListener('click', () => {
-                    modalImg.src = data.imageUrl;
-                    modalSender.textContent = data.senderName;
-                    modalMsg.textContent = `"${data.message}"`;
+                    currentIndex = index;
+                    updateModalContent();
                     modalViewer.style.display = 'flex';
                 });
                 liveGrid.appendChild(card);
@@ -384,9 +445,34 @@
             modalImg.src = '';
         };
 
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + allPhotos.length) % allPhotos.length;
+            updateModalContent();
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % allPhotos.length;
+            updateModalContent();
+        });
+
         closeModal.addEventListener('click', cerrarModal);
         modalViewer.addEventListener('click', (e) => { if (e.target === modalViewer) cerrarModal(); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalViewer.style.display === 'flex') cerrarModal(); });
+        
+        document.addEventListener('keydown', (e) => {
+            if (modalViewer.style.display === 'flex') {
+                if (e.key === 'Escape') cerrarModal();
+                if (e.key === 'ArrowLeft') {
+                    currentIndex = (currentIndex - 1 + allPhotos.length) % allPhotos.length;
+                    updateModalContent();
+                }
+                if (e.key === 'ArrowRight') {
+                    currentIndex = (currentIndex + 1) % allPhotos.length;
+                    updateModalContent();
+                }
+            }
+        });
 
         function escapeHtml(text) {
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
