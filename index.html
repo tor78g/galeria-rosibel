@@ -156,7 +156,7 @@
 
         <div id="successBox" class="success-box">
             <h3>¡Foto enviada con éxito! ✨</h3>
-            <p>Tu recuerdo ha sido compartido. ¡Sigue subiendo más momentos importantes!</p>
+            <p>Tu recuerdo ha sido enviado para ser moderado. ¡Pronto aparecerá en la galería!</p>
             <button type="button" id="resetBtn" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:8px; font-weight:bold;">Subir otra foto</button>
         </div>
 
@@ -230,17 +230,17 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // Comprime la imagen al 80% de calidad en formato JPEG
                         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
 
                         submitBtn.textContent = 'Subiendo... 🚀';
-                        statusMessage.textContent = 'Guardando en la base de datos...';
+                        statusMessage.textContent = 'Enviando a moderación...';
 
+                        // AQUÍ ESTÁ EL CAMBIO CLAVE: Entra como "pending" para requerir aprobación
                         await addDoc(collection(db, "fotos"), {
                             senderName: senderName,
                             message: message,
                             imageUrl: compressedBase64,
-                            status: "approved",
+                            status: "pending",
                             createdAt: new Date()
                         });
 
