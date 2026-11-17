@@ -18,74 +18,123 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            overflow-x: hidden;
+            position: relative;
         }
+
+        /* EFECTO DE PARTÍCULAS MÁGICAS / LUCIÉRNAGAS DE FONDO */
+        .magic-particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(212,175,55,0.9) 0%, rgba(110,231,183,0.4) 60%, transparent 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatParticle linear infinite;
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(105vh) translateX(0) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(50px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
         .container {
             width: 100%;
             max-width: 500px;
-            background: rgba(15, 23, 42, 0.9);
-            border-radius: 16px;
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            padding: 25px;
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 20px;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(110, 231, 183, 0.15);
+            padding: 30px 25px;
             box-sizing: border-box;
             text-align: center;
+            backdrop-filter: blur(12px);
+            position: relative;
+            z-index: 10;
         }
+
         h1 {
             font-family: 'Cinzel', serif;
             color: #d4af37;
-            font-size: 2.2rem;
+            font-size: 2.3rem;
             margin: 0 0 5px 0;
             letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
         }
+
         .subtitle {
             color: #6ee7b7;
             font-size: 0.9rem;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
             margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
         }
+
         .intro-text {
             color: #cbd5e1;
             font-size: 0.95rem;
             margin-bottom: 20px;
             line-height: 1.5;
         }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             text-align: left;
         }
+
         label {
             display: block;
             color: #d4af37;
             font-family: 'Cinzel', serif;
             font-size: 0.85rem;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
         }
+
         input[type="text"], textarea, input[type="file"] {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             background: rgba(2, 44, 34, 0.6);
             border: 1px solid rgba(212, 175, 55, 0.4);
-            border-radius: 8px;
+            border-radius: 10px;
             color: #fff;
             font-size: 1rem;
             box-sizing: border-box;
             outline: none;
+            transition: all 0.3s ease;
         }
+
         input[type="file"] {
-            padding: 8px;
+            padding: 9px;
             cursor: pointer;
+            color: #cbd5e1;
         }
+
         textarea {
             resize: none;
             height: 80px;
         }
+
         input:focus, textarea:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            border-color: #6ee7b7;
+            box-shadow: 0 0 12px rgba(110, 231, 183, 0.4);
+            background: rgba(2, 44, 34, 0.9);
         }
+
         .btn-magic {
             background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
             color: #000;
@@ -95,11 +144,22 @@
             width: 100%;
             padding: 14px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
             margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
+        .btn-magic:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.7);
+        }
+
+        .btn-magic:active {
+            transform: scale(0.98);
+        }
+
         .btn-gallery {
             display: block;
             margin-top: 20px;
@@ -108,31 +168,56 @@
             font-family: 'Cinzel', serif;
             font-size: 0.95rem;
             text-decoration: none;
-            padding: 10px;
-            border: 1px dashed rgba(110, 231, 183, 0.4);
-            border-radius: 8px;
+            padding: 12px;
+            border: 1px dashed rgba(110, 231, 183, 0.5);
+            border-radius: 10px;
+            transition: background 0.3s, border-color 0.3s;
         }
+
         .btn-gallery:hover {
-            background: rgba(110, 231, 183, 0.1);
+            background: rgba(110, 231, 183, 0.15);
+            border-color: #6ee7b7;
         }
+
         #statusMessage {
             margin-top: 15px;
             font-size: 0.95rem;
             font-style: italic;
             color: #facc15;
         }
+
         .success-box {
             display: none;
-            background: rgba(6, 78, 59, 0.9);
+            background: rgba(6, 78, 59, 0.95);
             border: 1px solid #6ee7b7;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             margin-top: 15px;
             color: #d1fae5;
+            box-shadow: 0 0 15px rgba(110,231,183,0.3);
         }
     </style>
 </head>
 <body>
+
+    <!-- GENERADOR DE LUCIÉRNAGAS Y POLVILLO MÁGICO -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const particleCount = 25;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'magic-particle';
+                const size = Math.random() * 6 + 4;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${Math.random() * 6 + 4}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                document.body.appendChild(particle);
+            }
+        });
+    </script>
+
     <div class="container">
         <h1>Bosque Encantado</h1>
         <div class="subtitle">MIS 15 AÑOS DE ROSSIBEL</div>
@@ -156,8 +241,8 @@
 
         <div id="successBox" class="success-box">
             <h3>¡Foto enviada con éxito! ✨</h3>
-            <p>Tu recuerdo ha sido enviado para ser moderado. ¡Pronto aparecerá en la galería!</p>
-            <button type="button" id="resetBtn" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:8px; font-weight:bold;">Subir otra foto</button>
+            <p>Tu recuerdo ha sido enviado a moderación. ¡Pronto brillará en la gran pantalla!</p>
+            <button type="button" id="resetBtn" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:10px; font-weight:bold; font-size:1rem;">Subir otra foto</button>
         </div>
 
         <div id="statusMessage"></div>
@@ -235,7 +320,6 @@
                         submitBtn.textContent = 'Subiendo... 🚀';
                         statusMessage.textContent = 'Enviando a moderación...';
 
-                        // AQUÍ ESTÁ EL CAMBIO CLAVE: Entra como "pending" para requerir aprobación
                         await addDoc(collection(db, "fotos"), {
                             senderName: senderName,
                             message: message,
