@@ -197,26 +197,57 @@
             if (!file) return;
 
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Subiendo... 🌟';
-            statusMessage.textContent = 'Guardando tu recuerdo en el Bosque Encantado...';
+            submitBtn.textContent = 'Procesando... 🌟';
+            statusMessage.textContent = 'Optimizando foto para el Bosque Encantado...';
 
             try {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = async () => {
-                    const base64Image = reader.result;
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = async () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 1000;
+                        const MAX_HEIGHT = 1000;
+                        let width = img.width;
+                        let height = img.height;
 
-                    await addDoc(collection(db, "fotos"), {
-                        senderName: senderName,
-                        message: message,
-                        imageUrl: base64Image,
-                        status: "approved",
-                        createdAt: new Date()
-                    });
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
 
-                    uploadForm.style.display = 'none';
-                    successBox.style.display = 'block';
-                    statusMessage.textContent = '';
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Comprime la imagen al 80% de calidad en formato JPEG
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+
+                        submitBtn.textContent = 'Subiendo... 🚀';
+                        statusMessage.textContent = 'Guardando en la base de datos...';
+
+                        await addDoc(collection(db, "fotos"), {
+                            senderName: senderName,
+                            message: message,
+                            imageUrl: compressedBase64,
+                            status: "approved",
+                            createdAt: new Date()
+                        });
+
+                        uploadForm.style.display = 'none';
+                        successBox.style.display = 'block';
+                        statusMessage.textContent = '';
+                    };
                 };
             } catch (error) {
                 console.error("Error al subir:", error);
