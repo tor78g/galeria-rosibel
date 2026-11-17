@@ -100,6 +100,12 @@
             height: 220px;
             object-fit: cover;
             border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .card img:hover {
+            opacity: 0.85;
         }
 
         .card-body {
@@ -193,6 +199,45 @@
             border: 2px dashed rgba(212, 175, 55, 0.3);
             font-family: 'Cinzel', serif;
         }
+
+        /* MODAL PARA VER FOTO EN GRANDE */
+        #imageModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #modalImg {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 12px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            object-fit: contain;
+        }
+
+        .close-modal {
+            margin-top: 15px;
+            background: #ffd700;
+            color: #000;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -215,11 +260,17 @@
         </div>
     </div>
 
-    <!-- SECCIÓN DE FOTOS APROBADAS (CON OPCIÓN DE REVERTIR O ELIMINAR) -->
+    <!-- SECCIÓN DE FOTOS APROBADAS -->
     <div class="section-container" id="sectionAprobadas">
         <div class="grid" id="adminGridAprobadas">
             <div class="empty-state">No hay fotos aprobadas todavía. 🌿</div>
         </div>
+    </div>
+
+    <!-- MODAL DE AMPLIACIÓN DE IMAGEN -->
+    <div id="imageModal">
+        <img id="modalImg" src="" alt="Vista previa ampliada">
+        <button class="close-modal" id="closeModalBtn">Cerrar ✖</button>
     </div>
 
     <script type="module">
@@ -263,6 +314,26 @@
         const countPendientes = document.getElementById('countPendientes');
         const countAprobadas = document.getElementById('countAprobadas');
 
+        // Modal Elements
+        const imageModal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        function openModal(imgSrc) {
+            modalImg.src = imgSrc;
+            imageModal.style.display = 'flex';
+        }
+
+        closeModalBtn.addEventListener('click', () => {
+            imageModal.style.display = 'none';
+        });
+
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
+        });
+
         // Escuchar Fotos Pendientes
         onSnapshot(query(collection(db, "fotos"), where("status", "==", "pending")), (snapshot) => {
             adminGridPendientes.innerHTML = '';
@@ -278,7 +349,7 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <img src="${data.imageUrl}" alt="Foto pendiente">
+                    <img src="${data.imageUrl}" alt="Foto pendiente" class="preview-trigger">
                     <div class="card-body">
                         <h3>${escapeHtml(data.senderName)}</h3>
                         <p>"${escapeHtml(data.message)}"</p>
@@ -288,6 +359,10 @@
                         <button class="btn-delete" data-id="${docSnap.id}">Rechazar 🗑️</button>
                     </div>
                 `;
+
+                card.querySelector('.preview-trigger').addEventListener('click', () => {
+                    openModal(data.imageUrl);
+                });
 
                 card.querySelector('.btn-approve').addEventListener('click', async () => {
                     await updateDoc(doc(db, "fotos", docSnap.id), { status: "approved" });
@@ -303,7 +378,7 @@
             });
         });
 
-        // Escuchar Fotos Aprobadas (con opción de revertir o eliminar)
+        // Escuchar Fotos Aprobadas
         onSnapshot(query(collection(db, "fotos"), where("status", "==", "approved")), (snapshot) => {
             adminGridAprobadas.innerHTML = '';
             countAprobadas.textContent = snapshot.size;
@@ -318,7 +393,7 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <img src="${data.imageUrl}" alt="Foto aprobada">
+                    <img src="${data.imageUrl}" alt="Foto aprobada" class="preview-trigger">
                     <div class="card-body">
                         <h3>${escapeHtml(data.senderName)}</h3>
                         <p>"${escapeHtml(data.message)}"</p>
@@ -328,6 +403,10 @@
                         <button class="btn-delete" data-id="${docSnap.id}">Eliminar 🗑️</button>
                     </div>
                 `;
+
+                card.querySelector('.preview-trigger').addEventListener('click', () => {
+                    openModal(data.imageUrl);
+                });
 
                 card.querySelector('.btn-revert').addEventListener('click', async () => {
                     if (confirm("¿Deseas devolver esta foto a pendientes?")) {
