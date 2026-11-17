@@ -117,7 +117,7 @@
             letter-spacing: 1px;
         }
 
-        input[type="text"], textarea, input[type="url"] {
+        input[type="text"], textarea, input[type="file"] {
             width: 100%;
             padding: 12px 15px;
             background: rgba(2, 44, 34, 0.6);
@@ -128,6 +128,12 @@
             box-sizing: border-box;
             outline: none;
             transition: all 0.3s ease;
+        }
+
+        input[type="file"] {
+            padding: 9px;
+            cursor: pointer;
+            color: #cbd5e1;
         }
 
         input:focus, textarea:focus {
@@ -226,7 +232,7 @@
             });
         </script>
 
-        <p class="intro-text">Abuela, tíos y familia: dejen su saludo en video (subido a Google Drive, YouTube o enlace directo) para que Rossibel lo vea en la gran pantalla.</p>
+        <p class="intro-text">Abuela, tíos y familia: graba o selecciona un video corto con tu saludo para que Rossibel lo vea en la gran pantalla.</p>
 
         <form id="videoForm">
             <div class="form-group">
@@ -234,19 +240,19 @@
                 <input type="text" id="senderName" required placeholder="Ej. Tía María desde España">
             </div>
             <div class="form-group">
-                <label>Enlace del Video (YouTube, Drive, etc.):</label>
-                <input type="url" id="videoUrl" required placeholder="https://...">
+                <label>Selecciona tu Video (Máx. corto):</label>
+                <input type="file" id="videoFile" accept="video/*" required>
             </div>
             <div class="form-group">
                 <label>Mensaje Corto para Rossibel:</label>
                 <textarea id="message" required placeholder="¡Felices 15 años, te amamos desde lejos!"></textarea>
             </div>
-            <button type="submit" class="btn-magic" id="submitBtn">✨ Enviar Saludo</button>
+            <button type="submit" class="btn-magic" id="submitBtn">✨ Subir Saludo en Video</button>
         </form>
 
         <div id="successBox" class="success-box">
-            <h3>¡Saludo enviado con éxito! ✨</h3>
-            <p>El video ha sido enviado a moderación para la gran pantalla.</p>
+            <h3>¡Video enviado con éxito! ✨</h3>
+            <p>El saludo ha sido enviado a moderación para la gran pantalla.</p>
             <button type="button" id="resetBtn" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:10px; font-weight:bold; font-size:1rem;">Enviar otro saludo</button>
         </div>
 
@@ -280,30 +286,42 @@
         videoForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const senderName = document.getElementById('senderName').value;
-            const videoUrl = document.getElementById('videoUrl').value;
+            const fileInput = document.getElementById('videoFile');
             const message = document.getElementById('message').value;
+            const file = fileInput.files[0];
+
+            if (!file) return;
 
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Enviando... 🚀';
-            statusMessage.textContent = 'Registrando saludo en el Bosque Encantado...';
+            submitBtn.textContent = 'Procesando video... 🌟';
+            statusMessage.textContent = 'Preparando el saludo para el Bosque Encantado...';
 
             try {
-                await addDoc(collection(db, "videos"), {
-                    senderName: senderName,
-                    videoUrl: videoUrl,
-                    message: message,
-                    status: "pending",
-                    createdAt: new Date()
-                });
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = async (event) => {
+                    const base64Video = event.target.result;
 
-                videoForm.style.display = 'none';
-                successBox.style.display = 'block';
-                statusMessage.textContent = '';
+                    submitBtn.textContent = 'Subiendo... 🚀';
+                    statusMessage.textContent = 'Enviando saludo a moderación...';
+
+                    await addDoc(collection(db, "videos"), {
+                        senderName: senderName,
+                        videoUrl: base64Video,
+                        message: message,
+                        status: "pending",
+                        createdAt: new Date()
+                    });
+
+                    videoForm.style.display = 'none';
+                    successBox.style.display = 'block';
+                    statusMessage.textContent = '';
+                };
             } catch (error) {
-                console.error("Error al enviar video:", error);
-                statusMessage.textContent = 'Hubo un error al enviar el saludo. Intenta de nuevo.';
+                console.error("Error al subir video:", error);
+                statusMessage.textContent = 'Hubo un error al subir el video. Intenta con un clip más corto.';
                 submitBtn.disabled = false;
-                submitBtn.textContent = '✨ Enviar Saludo';
+                submitBtn.textContent = '✨ Subir Saludo en Video';
             }
         });
 
@@ -312,7 +330,7 @@
             videoForm.style.display = 'block';
             successBox.style.display = 'none';
             submitBtn.disabled = false;
-            submitBtn.textContent = '✨ Enviar Saludo';
+            submitBtn.textContent = '✨ Subir Saludo en Video';
             statusMessage.textContent = '';
         });
     </script>
