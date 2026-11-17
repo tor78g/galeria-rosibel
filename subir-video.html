@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bosque Encantado - 15 Años Rossibel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at center, #064e3b 0%, #022c22 60%, #000000 100%);
+            color: #fff;
+            margin: 0;
+            padding: 20px 15px;
+            min-height: 100vh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 20px;
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(110, 231, 183, 0.2);
+            padding: 30px 25px;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-top {
+            position: relative;
+            overflow: hidden;
+            padding: 15px 10px 10px 10px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: rgba(2, 44, 34, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .magic-particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(52,211,153,0.8) 50%, transparent 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatParticle linear infinite;
+            box-shadow: 0 0 10px rgba(255,215,0,0.9), 0 0 18px rgba(52,211,153,0.6);
+            z-index: 1;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(90px) translateX(0) scale(0.6);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.9;
+            }
+            80% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-20px) translateX(30px) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: #ffd700;
+            font-size: 2.3rem;
+            margin: 0 0 5px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtitle {
+            color: #34d399;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(52, 211, 153, 0.7);
+            position: relative;
+            z-index: 2;
+        }
+
+        .intro-text {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #ffd700;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"], textarea, input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(2, 44, 34, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"] {
+            padding: 9px;
+            cursor: pointer;
+            color: #cbd5e1;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #34d399;
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.6);
+            background: rgba(2, 44, 34, 0.9);
+        }
+
+        .btn-magic {
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            color: #000;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-magic:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.8);
+        }
+
+        .btn-magic:active {
+            transform: scale(0.98);
+        }
+
+        .btn-gallery {
+            display: block;
+            margin-top: 20px;
+            background: transparent;
+            color: #34d399;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 12px;
+            border: 1px dashed rgba(52, 211, 153, 0.6);
+            border-radius: 10px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .btn-gallery:hover {
+            background: rgba(52, 211, 153, 0.2);
+            border-color: #34d399;
+        }
+
+        .btn-video {
+            display: block;
+            margin-top: 10px;
+            background: rgba(212, 175, 55, 0.1);
+            color: #ffd700;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 10px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .btn-video:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #ffd700;
+        }
+
+        #statusMessage {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: #facc15;
+        }
+
+        .success-box {
+            display: none;
+            background: rgba(6, 78, 59, 0.95);
+            border: 1px solid #34d399;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+            color: #d1fae5;
+            box-shadow: 0 0 20px rgba(52,211,153,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-top" id="headerTop">
+            <h1>Bosque Encantado</h1>
+            <div class="subtitle">MIS 15 AÑOS DE ROSSIBEL</div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const header = document.getElementById('headerTop');
+                const particleCount = 18;
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'magic-particle';
+                    const size = Math.random() * 7 + 5;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.animationDuration = `${Math.random() * 3 + 2.5}s`;
+                    particle.style.animationDelay = `${Math.random() * 3}s`;
+                    header.appendChild(particle);
+                }
+            });
+        </script>
+
+        <p class="intro-text">Comparte tus mejores momentos de la celebración. Sube tu foto con un mensaje para que forme parte de esta noche mágica.</p>
+
+        <form id="uploadForm">
+            <div class="form-group">
+                <label>Tu Nombre o Familia:</label>
+                <input type="text" id="senderName" required placeholder="Ej. Familia Torres">
+            </div>
+            <div class="form-group">
+                <label>Tu Mensaje para Rossibel:</label>
+                <textarea id="message" required placeholder="Escribe un deseo especial..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Selecciona tu Foto:</label>
+                <input type="file" id="photoFile" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn-magic" id="submitBtn">✨ Subir Mi Momento Mágico</button>
+        </form>
+
+        <div id="successBox" class="success-box">
+            <h3>¡Foto enviada con éxito! ✨</h3>
+            <p>Tu recuerdo ha sido enviado a moderación. ¡Pronto brillará en la gran pantalla!</p>
+            <button type="button" id="resetBtn" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:10px; font-weight:bold; font-size:1rem;">Subir otra foto</button>
+        </div>
+
+        <div id="statusMessage"></div>
+
+        <a href="galeria.html" class="btn-gallery">🌿 Visitar Galería en Vivo</a>
+        <a href="subir-video.html" class="btn-video">🎥 Enviar Saludo en Video (Familia Exterior)</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTjyrFGjq5zr5hqnMT3qZX4sNuWZT3AJQ",
+            authDomain: "rosibel15.firebaseapp.com",
+            projectId: "rosibel15",
+            storageBucket: "rosibel15.firebasestorage.app",
+            messagingSenderId: "1042848632443",
+            appId: "1:1042848632443:web:7b9ebf2da8bb21dd56dcde"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const uploadForm = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const successBox = document.getElementById('successBox');
+        const resetBtn = document.getElementById('resetBtn');
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const senderName = document.getElementById('senderName').value;
+            const message = document.getElementById('message').value;
+            const fileInput = document.getElementById('photoFile');
+            const file = fileInput.files[0];
+
+            if (!file) return;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Procesando... 🌟';
+            statusMessage.textContent = 'Optimizando foto para el Bosque Encantado...';
+
+            try {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = async () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 1000;
+                        const MAX_HEIGHT = 1000;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+
+                        submitBtn.textContent = 'Subiendo... 🚀';
+                        statusMessage.textContent = 'Enviando a moderación...';
+
+                        await addDoc(collection(db, "fotos"), {
+                            senderName: senderName,
+                            message: message,
+                            imageUrl: compressedBase64,
+                            status: "pending",
+                            createdAt: new Date()
+                        });
+
+                        uploadForm.style.display = 'none';
+                        successBox.style.display = 'block';
+                        statusMessage.textContent = '';
+                    };
+                };
+            } catch (error) {
+                console.error("Error al subir:", error);
+                statusMessage.textContent = 'Hubo un error al subir la foto. Intenta de nuevo.';
+                submitBtn.disabled = false;
+                submitBtn.textContent = '✨ Subir Mi Momento Mágico';
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            uploadForm.reset();
+            uploadForm.style.display = 'block';
+            successBox.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.textContent = '✨ Subir Mi Momento Mágico';
+            statusMessage.textContent = '';
+        });
+    </script>
+</body>
+</html>
