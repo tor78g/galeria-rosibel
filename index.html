@@ -3,182 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparte tu Foto - 15 Años Rossibel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>Bosque Encantado - 15 Años Rossibel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle, #022c22, #000000);
+            background: radial-gradient(circle at center, #064e3b 0%, #022c22 60%, #000000 100%);
             color: #fff;
             margin: 0;
-            padding: 20px;
+            padding: 20px 15px;
             min-height: 100vh;
+            box-sizing: border-box;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
         .container {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            border-radius: 20px;
-            padding: 30px;
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
+            max-width: 500px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 16px;
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            padding: 25px;
             box-sizing: border-box;
+            text-align: center;
+            backdrop-filter: blur(10px);
         }
         h1 {
             font-family: 'Cinzel', serif;
             color: #d4af37;
-            text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 5px;
+            font-size: 2.2rem;
+            margin: 0 0 5px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
         }
         .subtitle {
-            text-align: center;
             color: #6ee7b7;
             font-size: 0.9rem;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
+            letter-spacing: 3px;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .intro-text {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            text-align: left;
         }
         label {
             display: block;
-            margin-bottom: 8px;
-            color: #e2e8f0;
-            font-weight: 600;
-            font-size: 0.9rem;
+            color: #d4af37;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
         }
         input[type="text"], textarea, input[type="file"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            background: rgba(0, 0, 0, 0.3);
-            color: #fff;
+            background: rgba(2, 44, 34, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.4);
             border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
             box-sizing: border-box;
-            font-family: inherit;
+            outline: none;
         }
-        textarea { resize: vertical; height: 80px; }
         input[type="file"] {
             padding: 8px;
             cursor: pointer;
         }
-        .btn-submit {
-            background: linear-gradient(135deg, #d4af37, #aa7c11);
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+        input:focus, textarea:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        .btn-magic {
+            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
             color: #000;
-            border: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1.1rem;
             width: 100%;
             padding: 14px;
+            border: none;
             border-radius: 8px;
-            font-weight: bold;
-            font-size: 1rem;
             cursor: pointer;
-            transition: opacity 0.2s;
-            font-family: 'Cinzel', serif;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
         }
-        .btn-submit:hover { opacity: 0.9; }
-        #loading {
-            display: none;
-            text-align: center;
-            color: #6ee7b7;
-            margin-top: 15px;
-            font-weight: 600;
+        .btn-magic:active {
+            transform: scale(0.98);
         }
-        
-        /* PANTALLA DE AGRADECIMIENTO PROFESIONAL */
-        #successScreen {
-            display: none;
-            text-align: center;
-            animation: fadeIn 0.6s ease;
-        }
-        #successScreen h2 {
-            font-family: 'Cinzel', serif;
-            color: #d4af37;
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-        }
-        #successScreen p {
-            color: #e2e8f0;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-        .btn-another {
+        .btn-gallery {
+            display: block;
+            margin-top: 20px;
             background: transparent;
-            border: 2px solid #d4af37;
-            color: #d4af37;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-            margin-bottom: 15px;
-        }
-        .btn-another:hover {
-            background: #d4af37;
-            color: #000;
-        }
-        .keep-sharing-link {
             color: #6ee7b7;
-            font-size: 0.9rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
             text-decoration: none;
-            display: inline-block;
-            margin-top: 5px;
-            border-bottom: 1px dashed #6ee7b7;
-            padding-bottom: 2px;
-            transition: color 0.2s;
+            padding: 10px;
+            border: 1px dashed rgba(110, 231, 183, 0.4);
+            border-radius: 8px;
+            transition: background 0.2s;
         }
-        .keep-sharing-link:hover {
-            color: #34d399;
+        .btn-gallery:hover {
+            background: rgba(110, 231, 183, 0.1);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        #statusMessage {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+        .success-box {
+            display: none;
+            background: rgba(6, 78, 59, 0.8);
+            border: 1px solid #6ee7b7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: #d1fae5;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        
-        <!-- FORMULARIO DE SUBIDA -->
-        <div id="formContainer">
-            <h1>Bosque Encantado</h1>
-            <div class="subtitle">MIS 15 AÑOS ROSSIBEL</div>
-            
-            <form id="uploadForm">
-                <div class="form-group">
-                    <label>Tu Nombre o Familia:</label>
-                    <input type="text" id="senderName" required placeholder="Ej. Familia Pérez">
-                </div>
-                <div class="form-group">
-                    <label>Mensaje para Rossibel:</label>
-                    <textarea id="message" required placeholder="Escribe un lindo deseo..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Selecciona tu Foto:</label>
-                    <input type="file" id="imageFile" accept="image/*" required>
-                </div>
-                <button type="submit" class="btn-submit" id="submitBtn">Enviar al Muro</button>
-                <div id="loading">Optimizando y subiendo recuerdo...</div>
-            </form>
-        </div>
+        <h1>Bosque Encantado</h1>
+        <div class="subtitle">MIS 15 AÑOS DE ROSSIBEL</div>
+        <p class="intro-text">Comparte tus mejores momentos de la celebración. Sube tu foto con un mensaje para que forme parte de esta noche mágica.</p>
 
-        <!-- PANTALLA DE AGRADECIMIENTO PROFESIONAL -->
-        <div id="successScreen">
-            <h2>¡Muchas Gracias!</h2>
-            <p>Gracias por compartir momentos importantes en mi celebración de 15 Años.</p>
-            <button class="btn-another" id="resetBtn">Subir otra foto</button>
-            <div>
-                <a href="#" class="keep-sharing-link" id="keepSharingLink">✨ Sigue compartiendo momentos</a>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label>Tu Nombre o Familia:</label>
+                <input type="text" id="senderName" required placeholder="Ej. Familia Torres">
             </div>
+            <div class="form-group">
+                <label>Tu Mensaje para Rossibel:</label>
+                <textarea id="message" required placeholder="Escribe un deseo especial..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Selecciona tu Foto:</label>
+                <input type="file" id="photoFile" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn-magic" id="submitBtn">✨ Subir Mi Momento Mágico</button>
+        </form>
+
+        <div id="successBox" class="success-box">
+            <h3>¡Foto enviada con éxito! ✨</h3>
+            <p>Tu recuerdo ha sido compartido. ¡Sigue subiendo más momentos importantes de la noche!</p>
+            <button onclick="resetForm()" style="background:none; border:none; color:#facc15; text-decoration:underline; cursor:pointer; margin-top:8px;">Subir otra foto</button>
         </div>
 
+        <div id="statusMessage"></div>
+
+        <a href="galeria.html" class="btn-gallery">🌿 Visitar Galería en Vivo</a>
     </div>
 
     <script type="module">
@@ -199,96 +188,56 @@
 
         const uploadForm = document.getElementById('uploadForm');
         const submitBtn = document.getElementById('submitBtn');
-        const loading = document.getElementById('loading');
-        const formContainer = document.getElementById('formContainer');
-        const successScreen = document.getElementById('successScreen');
-        const resetBtn = document.getElementById('resetBtn');
-        const keepSharingLink = document.getElementById('keepSharingLink');
-
-        // Función para comprimir y redimensionar la imagen automáticamente antes de convertirla a Base64
-        function compressImage(file, maxWidth = 1200, quality = 0.7) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > maxWidth) {
-                            height = Math.round((height * maxWidth) / width);
-                            width = maxWidth;
-                        }
-
-                        const canvas = document.createElement('canvas');
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        // Convertir a formato JPEG optimizado
-                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
-                        resolve(dataUrl);
-                    };
-                    img.onerror = (error) => reject(error);
-                };
-                reader.onerror = (error) => reject(error);
-            });
-        }
+        const statusMessage = document.getElementById('statusMessage');
+        const successBox = document.getElementById('successBox');
 
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            submitBtn.style.display = 'none';
-            loading.style.display = 'block';
-
             const senderName = document.getElementById('senderName').value;
             const message = document.getElementById('message').value;
-            const fileInput = document.getElementById('imageFile');
+            const fileInput = document.getElementById('photoFile');
             const file = fileInput.files[0];
 
-            if (!file) {
-                alert("Por favor selecciona una foto.");
-                loading.style.display = 'none';
-                submitBtn.style.display = 'block';
-                return;
-            }
+            if (!file) return;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Subiendo al Bosque Encantado... 🌟';
+            statusMessage.textContent = 'Procesando imagen, por favor espera...';
 
             try {
-                // Comprimir la imagen antes de enviarla a Firebase
-                const compressedBase64 = await compressImage(file, 1200, 0.7);
+                // Conversión de la imagen a Base64 para guardarla directamente en Firestore sin configurar Storage de pago
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = async () => {
+                    const base64Image = reader.result;
 
-                await addDoc(collection(db, "fotos"), {
-                    senderName: senderName,
-                    message: message,
-                    imageUrl: compressedBase64,
-                    status: "pending",
-                    timestamp: Date.now()
-                });
+                    await addDoc(collection(db, "fotos"), {
+                        senderName: senderName,
+                        message: message,
+                        imageUrl: base64Image,
+                        status: "approved", // Opcional: si quieres moderación, cámbialo a "pending"
+                        createdAt: new Date()
+                    });
 
-                loading.style.display = 'none';
-                uploadForm.reset();
-                formContainer.style.display = 'none';
-                successScreen.style.display = 'block';
-
+                    uploadForm.style.display = 'none';
+                    successBox.style.display = 'block';
+                    statusMessage.textContent = '';
+                };
             } catch (error) {
-                console.error("Error al procesar o subir la foto:", error);
-                alert("Hubo un error al enviar la foto. Intenta con otra imagen.");
-                loading.style.display = 'none';
-                submitBtn.style.display = 'block';
+                console.error("Error al subir:", error);
+                statusMessage.textContent = 'Hubo un error al subir la foto. Intenta de nuevo.';
+                submitBtn.disabled = false;
+                submitBtn.textContent = '✨ Subir Mi Momento Mágico';
             }
         });
 
-        const reiniciarFormulario = (e) => {
-            if(e) e.preventDefault();
-            successScreen.style.display = 'none';
-            formContainer.style.display = 'block';
-            submitBtn.style.display = 'block';
-        };
-
-        resetBtn.addEventListener('click', reiniciarFormulario);
-        keepSharingLink.addEventListener('click', reiniciarFormulario);
+        window.resetForm = function() {
+            uploadForm.reset();
+            uploadForm.style.display = 'block';
+            successBox.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.textContent = '✨ Subir Mi Momento Mágico';
+        }
     </script>
 </body>
 </html>
