@@ -157,24 +157,27 @@
                 return;
             }
 
-            const wasEmpty = approvedPhotos.length === 0;
+            const isFirstLoad = approvedPhotos.length === 0;
             approvedPhotos = newPhotos;
 
             if (currentIndex >= approvedPhotos.length) {
                 currentIndex = 0;
             }
 
-            if (wasEmpty || !slideInterval) {
-                renderCurrentSlide();
-                if (!slideInterval && approvedPhotos.length > 1) {
-                    slideInterval = setInterval(nextSlide, 8000);
-                }
+            // Renderizar de inmediato si es la primera carga o si cambió el estado
+            renderCurrentSlide();
+
+            // Gestionar el carrusel automático
+            if (!slideInterval && approvedPhotos.length > 1) {
+                slideInterval = setInterval(nextSlide, 8000);
+            } else if (approvedPhotos.length <= 1 && slideInterval) {
+                clearInterval(slideInterval);
+                slideInterval = null;
             }
         });
 
         function renderCurrentSlide() {
             if (approvedPhotos.length === 0) return;
-
             const photo = approvedPhotos[currentIndex];
 
             slideContainer.innerHTML = `
